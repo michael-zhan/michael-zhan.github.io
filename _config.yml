@@ -33,7 +33,7 @@ twitter:
   card: summary
 logo: logo.png
 social:
-  name: Songzi Vong
+  name: Zhan Meixiang
   links:
     - https://twitter.com/vszhub
     - https://github.com/michael-zhan
@@ -55,5 +55,5 @@ sass:
 # Specify the author for blog posts
 author:
   name: Songzi Vong
-  url: https://github.com/michael-zhan/
+  url: https://github.com/vszhub/
   email: vszhub@gmail.com
