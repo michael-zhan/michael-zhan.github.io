@@ -710,11 +710,12 @@
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d -g</span><br></pre></td></tr></table></figure>
 
-<h3 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h3><p>很多人的电脑上的可能不止一个一个npm或者nodejs，比如笔者就因机器学习安装了Anaconda,而Anaconda有着自己一套环境系统。我可能在学机器学习时改动了一些系统路径（不清楚），总之导致后来我的git bash提示找不到hexo的文件</p>
-<p>这里提供一个使用完整的绝对路径来运行hexo的方法</p>
-<p>正确的情况是应该是，nodejs是下载在我们的博客目录的，所以我们使用也应该是我们博客目录下的node_modules的hexo，下面以我的博客目录为例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ </span><br></pre></td></tr></table></figure>
+<h3 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h3><p>很多人的电脑上的可能不止一个npm或者nodejs，比如笔者就因机器学习安装了Anaconda,而Anaconda有着自己一套环境系统。我可能在学机器学习时改动了一些系统路径（不清楚），总之导致一段时间后我的git bash提示找不到hexo的文件</p>
+<p>这里提供一个使用完整的绝对路径来运行hexo命令的方法</p>
+<p>正确的情况是应该是，nodejs是下载在我们的博客目录的，所以我们使用也应该是我们博客目录下的node_modules的hexo，下面以我的博客目录为例,使用绝对路径来运行发布文章的命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  F:\\Blogs\\node_modules\\hexo-cli\\bin\\hexo d -g</span><br></pre></td></tr></table></figure>
 
+<p>笔者通过这样的方式解决了问题</p>
 <hr>
 <h2 id="hexo主题"><a href="#hexo主题" class="headerlink" title="hexo主题"></a>hexo主题</h2><p>Hexo可选主题的很多，须要另行配置，毕竟默认主题一点个性也没有。<br>我选用的是<a target="_blank" rel="noopener" href="https://github.com/litten/hexo-theme-yilia">yilia</a>，轻量化的一款。</p>
 <hr>
