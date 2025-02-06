@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>博客搭建记录 | Michael&#39;s Personal Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="[TOC] 使用到的框架、软件、平台 Hexo Github PicGo+jsdelivr nodejs   GitHub提供了一项服务 GitHub Pages，这个 GitHub Pages 可以将我们托管在 GitHub 上的一个仓库中的 html、css 和 js 代码渲染成静态页面。当然，这个仓库是特殊的，所以每一个 GitHub 账户只能够育一个这样的仓库。将相应的博客内容上传到 Gi">
+  <meta name="description" content="[TOC] 博客搭建记录技术栈 Hexo Github PicGo+jsdelivr nodejs   GitHub提供了一项服务 GitHub Pages，这个 GitHub Pages 可以将我们托管在 GitHub 上的一个仓库中的 html、css 和 js 代码渲染成静态页面。当然，这个仓库是特殊的，所以每一个 GitHub 账户只能够育一个这样的仓库。将相应的博客内容上传到 GitHu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博客搭建记录">
 <meta property="og:url" content="http://example.com/2023/03/20/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="Michael&#39;s Personal Blog">
-<meta property="og:description" content="[TOC] 使用到的框架、软件、平台 Hexo Github PicGo+jsdelivr nodejs   GitHub提供了一项服务 GitHub Pages，这个 GitHub Pages 可以将我们托管在 GitHub 上的一个仓库中的 html、css 和 js 代码渲染成静态页面。当然，这个仓库是特殊的，所以每一个 GitHub 账户只能够育一个这样的仓库。将相应的博客内容上传到 Gi">
+<meta property="og:description" content="[TOC] 博客搭建记录技术栈 Hexo Github PicGo+jsdelivr nodejs   GitHub提供了一项服务 GitHub Pages，这个 GitHub Pages 可以将我们托管在 GitHub 上的一个仓库中的 html、css 和 js 代码渲染成静态页面。当然，这个仓库是特殊的，所以每一个 GitHub 账户只能够育一个这样的仓库。将相应的博客内容上传到 GitHu">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202303221612222.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202303221628120.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202303221725219.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202303221816974.jpg">
 <meta property="article:published_time" content="2023-03-20T09:51:09.000Z">
-<meta property="article:modified_time" content="2024-04-04T15:36:57.691Z">
+<meta property="article:modified_time" content="2025-02-06T02:09:16.448Z">
 <meta property="article:author" content="Michael">
 <meta property="article:tag" content="博客建设">
 <meta name="twitter:card" content="summary">
@@ -169,7 +169,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>[TOC]</p>
-<h2 id="使用到的框架、软件、平台"><a href="#使用到的框架、软件、平台" class="headerlink" title="使用到的框架、软件、平台"></a>使用到的框架、软件、平台</h2><ul>
+<h2 id="博客搭建记录"><a href="#博客搭建记录" class="headerlink" title="博客搭建记录"></a>博客搭建记录</h2><h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><ul>
 <li>Hexo</li>
 <li>Github</li>
 <li>PicGo+jsdelivr</li>
@@ -178,28 +178,53 @@
 <p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202303221612222.png" alt="image-20230322161241959"></p>
 <p>GitHub提供了一项服务 GitHub Pages，这个 GitHub Pages 可以将我们托管在 GitHub 上的一个仓库中的 html、css 和 js 代码渲染成静态页面。当然，这个仓库是特殊的，所以每一个 GitHub 账户只能够育一个这样的仓库。将相应的博客内容上传到 GitHub 上之后，我们就可以通过<a target="_blank" rel="noopener" href="https://www.username.github.io/">https://www.username.github.io</a> 来访问自己的博客，这里的 username 要换成自己的用户名。比如，我的用户名是 michael-zhan，那么就可以通过 <a target="_blank" rel="noopener" href="https://www.michael-zhan.github.io/">https://www.michael-zhan.github.io</a> 来访问我的博客。</p>
 <p>Hexo 是使用 nodejs 开发的一个快速、简洁、高效的静态博客生成器。Hexo 使用 Markdown 语法解析文章，然后渲染成相应的网页，然后我们将渲染好的网页代码上传到 GitHub 上就可以了。简单来讲，利用 Hexo，我们只需要使用 Markdown 语法写文章，剩下的事情全部交给 Hexo 去做，我们就可以看到想要的博客效果了。</p>
-<p>PicGo是一个图片上传软件。md文档不像word文档可以直接插入图片，而是插入图片的链接，这个链接通常是本地的。因此当文档发布到网上去时，图片链接自然就会失效，图片无法显示。通过PicGo+一个图床网站，我们就可以便捷地把图片上传上网，也就可以在md文档中插入一个网络链接，图片就能成功显示。而Github就可以作为图床网站，下面会介绍。</p>
-<p>jsdelivr配合PicGo一起使用可以加快图片加载效率，用起来十分简单，后面会讲到。</p>
-<p>nodejs是目前相当流行的JavaScript运行环境，但在这里不需要了解太多。</p>
+<p>PicGo 是一个图片上传软件。md文档不像word文档可以直接插入图片，而是插入图片的链接，这个链接通常是本地的。因此当文档发布到网上去时，图片链接自然就会失效，图片无法显示。通过 PicGo + 一个图床网站，我们就可以便捷地把图片上传上网，也就可以在md文档中插入一个网络链接，图片就能成功显示。而 Github 就可以作为图床网站，下面会介绍。</p>
+<p>jsdelivr配合 PicGo 一起使用可以加快图片加载效率，用起来十分简单，后面会讲到。</p>
+<p>nodejs 是目前相当流行的 JavaScript 运行环境，但在这里不需要了解太多。</p>
 <hr>
-<h2 id="Github环节"><a href="#Github环节" class="headerlink" title="Github环节"></a>Github环节</h2><h3 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h3><p>新建一个名为 username.github.io（这里的 username 要替换成自己的实际的用户名，注意是用户名，不是昵称） 的仓库</p>
+<h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><h3 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h3><p>新建一个名为 <code>&#123;username&#125;.github.io</code>的仓库</p>
 <h3 id="配置SSH"><a href="#配置SSH" class="headerlink" title="配置SSH"></a>配置SSH</h3><ol>
 <li><p>打开 Git Bash，输入命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">&quot;user.email&quot;</span> <span class="comment"># user.email 为GitHub 上注册的邮箱</span></span><br></pre></td></tr></table></figure>
-<p>然后直接三个回车即可，默认不需要设置密码。查看是否已经有 ssh 密钥。打开用户主目录 C:\Users\username.ssh，.ssh文件夹一定存放在C:，至于后面的路径lenovo这个不一定每台电脑都相同。找到.ssh文件夹，找到其中的 id_rsa.pub 密钥，将内容全部复制。其中 id_rsa 是私钥不能泄露，id_rsa.pub 是公钥可以放心告诉他人。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C user.email # user.email 为GitHub 上注册的邮箱</span><br></pre></td></tr></table></figure>
+
+<p>然后直接三个回车即可，默认不需要设置密码。</p>
+</li>
+<li><p>查看是否已经有 ssh 密钥：进入用户主目录 C:\Users.ssh，找到其中的<code>id_rsa.pub</code>密钥，将内容全部复制。</p>
+<ul>
+<li><code>id_rsa </code>是私钥不能泄露</li>
+<li><code>id_rsa.pub</code> 是公钥可以放心告诉他人。</li>
+</ul>
 </li>
 <li><p>打开 GitHub SSH and GPG keys 页面（在自己主页的setting里），新建一个 ssh key：</p>
+<p>Title 为标题，任意填即可，将刚刚复制的<code>id_rsa.pub</code>内容粘贴进去，添加。</p>
 </li>
 </ol>
 <p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202303221628120.png" alt="image-20230322162833091"></p>
-<p>Title 为标题，任意填即可，将刚刚复制的 id_rsa.pub 内容粘贴进去，最后点击 Add SSH key。在 Git Bash 中检测 GitHub 公钥设置是否成功，输入如下命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ssh -T git@github.com</span></span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li><p>在 Git Bash 中检测 GitHub 公钥设置是否成功，输入如下命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
 
-<p>成功的话会提示sucessfully字样，还有提示does not provide shell access,这不用管。</p>
+<p>成功的话会提示 sucessfully 字样，还有提示does not provide shell access，这不用管。</p>
+</li>
+<li><p>如果这一步出现报错：<code>connect to host github.com port 22: Connection timed out</code></p>
+<p>尝试：</p>
+<ol>
+<li><p>在C盘——用户——你的主机名文件夹中找到 .ssh 文件夹；（此前配置SSH时会生成该文件夹）</p>
+</li>
+<li><p>在.ssh文件夹中新建文件 config，不带后缀（可以新建文本文档，去掉.txt后缀）</p>
+</li>
+<li><p>打开 config 文件，输入以下内容，保存。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">User YourEmail（你的邮箱）</span><br><span class="line">Hostname ssh.github.com</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile ~/.ssh/id_rsa</span><br><span class="line">Port 443</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再次尝试 <code>ssh -T git@github.com</code></p>
+</li>
+</ol>
+</li>
+</ol>
 <hr>
-<h2 id="nodejs环节"><a href="#nodejs环节" class="headerlink" title="nodejs环节"></a>nodejs环节</h2><p>没有安装nodejs的话请自行搜索教程，<strong>安装后才可进行下面的hexo环节</strong></p>
+<h2 id="nodejs"><a href="#nodejs" class="headerlink" title="nodejs"></a>nodejs</h2><p>没有安装nodejs的话请自行搜索教程，<strong>安装后才可进行下面的 hexo 环节</strong></p>
 <hr>
-<h2 id="hexo环节"><a href="#hexo环节" class="headerlink" title="hexo环节"></a>hexo环节</h2><p>（提示：以下有关npm的命令尽量在管理员身份运行的cmd中执行，否则可能报错）</p>
+<h2 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h2><p>（提示：以下有关 npm 的命令尽量以管理员身份执行，否则可能报错）</p>
 <h3 id="安装与初始化"><a href="#安装与初始化" class="headerlink" title="安装与初始化"></a>安装与初始化</h3><ol>
 <li>在 Git Bash 中输入以下命令：</li>
 </ol>
@@ -211,75 +236,78 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init <span class="comment"># 该命令完成 hexo 在本地博客目录的初始化</span></span><br></pre></td></tr></table></figure>
 
 <ol start="3">
-<li><strong>如果执行后提示dependency没有安装（没有提示就可以跳过这一步）</strong>，而且发现初始化的目录中缺少 node_modules 文件夹，导致这个原因为在自己的博客文件夹中 .gitignore 文件中添加了 node_modules&#x2F; ，导致更新的时候，这个文件夹被忽略，没有被更新上去。</li>
-</ol>
+<li><p><strong>如果执行后提示 dependency 没有安装（没有提示就可以跳过这一步）</strong>，而且发现初始化的目录中缺少 node_modules 文件夹，导致这个原因为在自己的博客文件夹中 .gitignore 文件中添加了 node_modules&#x2F; ，导致更新的时候，这个文件夹被忽略，没有被更新上去。</p>
 <p>解决方案：</p>
-<p>cmd进入博客当前文件夹路径<br>执行 npm install<br>执行 hexo server</p>
+<ol>
+<li>进入博客当前文件夹路径</li>
+<li><code>npm install</code></li>
+<li><code> hexo server</code></li>
+</ol>
+</li>
+</ol>
 <h3 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h3><ol>
-<li>在 Git Bash 中输入以下命令：</li>
+<li><p>在 Git Bash 中输入以下命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g # 生成静态文件</span><br></pre></td></tr></table></figure></li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g <span class="comment"># 生成静态文件</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="本地预览"><a href="#本地预览" class="headerlink" title="本地预览"></a>本地预览</h3><ol>
-<li>在 <code>Git Bash</code> 输入以下命令：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s <span class="comment"># 开启本地预览</span></span><br></pre></td></tr></table></figure>
+<li><p>在 Git Bash 输入以下命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s # 开启本地预览</span><br></pre></td></tr></table></figure>
 
 <p><code>hexo s</code> 是开启本地预览服务，打开浏览器访问 <code>http://localhost:4000</code> 即可看到内容，<code>Ctrl+C</code> 停止本地预览。本地预览可以实时查看博客的编辑情况，待博客写完后一起部署到 <code>GitHub</code> 上。</p>
-<p>第一次初始化的时候 <code>hexo</code> 已经帮我们写了一篇名为 Hello World 的文章，默认的主题比较丑。</p>
+<p>第一次初始化的时候 hexo 已经帮我们写了一篇名为 Hello World 的文章，默认的主题比较丑。</p>
+</li>
+</ol>
 <h3 id="部署到-GitHub"><a href="#部署到-GitHub" class="headerlink" title="部署到 GitHub"></a>部署到 GitHub</h3><ol>
-<li>配置站点配置文件</li>
-</ol>
-<p><code>hexo</code> 有 2 种 <code>_config.yml</code> 文件，一个是根目录下的全局的 <code>_config.yml</code>，一个是各个主体 <code>theme</code> 下的 <code>_config.yml</code>。将前者称为站点配置文件， 后者称为主题配置文件。</p>
+<li><p>配置站点配置文件</p>
+<p>hexo 有 2 种 <code>_config.yml</code> 文件，一个是根目录下的全局的 <code>_config.yml</code>，一个是各个主体 <code>theme</code> 下的 <code>_config.yml</code>。将前者称为站点配置文件， 后者称为主题配置文件。</p>
 <p>打开根目录下站点配置文件 <code>_config.yml</code>，配置有关 <code>deploy</code> 的部分：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:username/reponame.github.io.git <span class="comment">#username是你的用户名，repo那么是你的仓库名</span></span><br><span class="line">  branch: main <span class="comment">#2020年github项目主支默认名称已经从master改为main</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>安装插件</li>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:username/reponame.github.io.git</span> <span class="comment">#username是你的用户名，repo那么是你的仓库名</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span> <span class="comment">#2020年github项目主支默认名称已经从master改为main</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装插件</p>
+<p>在 Git Bash 中输入以下命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save # 安装部署插件</span><br></pre></td></tr></table></figure></li>
 </ol>
-<p>在 <code>Git Bash</code> 中输入以下命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">npm install hexo-deployer-git --save <span class="comment"># 安装部署插件</span></span></span><br></pre></td></tr></table></figure>
-
-<p>如果不进行上述操作，直接使用 <code>hexo d</code> 部署到 <code>GitHub</code>，将会报错。</p>
+<p>​      如果不进行上述操作，直接使用 <code>hexo d</code> 部署到 <code>GitHub</code>，可能会报错。</p>
 <ol start="3">
-<li>部署到 GitHub</li>
-</ol>
-<p>在 <code>Git Bash</code> 中输入以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+<li><p>部署到 GitHub</p>
+<p>在 Git Bash 中输入以下命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
 
 <p>部署成功后，打开对应的网址 <code>https://www.username.github.io</code>，如果出现了和本地预览一样的效果，那么，表明部署成功。</p>
+</li>
+</ol>
 <h3 id="配置Hexo基本信息"><a href="#配置Hexo基本信息" class="headerlink" title="配置Hexo基本信息"></a>配置Hexo基本信息</h3><ol>
-<li>配置站点信息<br>打开根目录下站点配置文件_config.yml，设置如下内容：</li>
+<li>配置站点信息<br>  打开根目录下站点配置文件<code>_config.yml</code>，设置如下内容：</li>
 </ol>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">title：网站标题</span></span><br><span class="line"><span class="string">subtitle：网站副标题</span></span><br><span class="line"><span class="string">description：网站描述</span></span><br><span class="line"><span class="string">keywords：关键字</span></span><br><span class="line"><span class="string">author：作者</span></span><br><span class="line"><span class="string">language：网站使用的语言</span></span><br><span class="line"><span class="string">timezone：网站时区。Hexo</span> <span class="string">默认使用您电脑的时区</span></span><br></pre></td></tr></table></figure>
+  <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">title：网站标题</span><br><span class="line">subtitle：网站副标题</span><br><span class="line">description：网站描述</span><br><span class="line">keywords：关键字</span><br><span class="line">author：作者</span><br><span class="line">language：网站使用的语言</span><br><span class="line">timezone：网站时区。Hexo 默认使用您电脑的时区</span><br></pre></td></tr></table></figure>
 
-<p>其中language一定要设置为主题（下面有介绍主题）能够识别的语言（不然中文可能出现乱码），在 \themes\yilia\languages\ 中可以找到</p>
+<p>  其中 <code>language</code>一定要设置为主题（下面有介绍主题）能够识别的语言（不然中文可能出现乱码），在 <code>\themes\yilia\languages\ </code>中可以找到。</p>
 <h3 id="发布文章"><a href="#发布文章" class="headerlink" title="发布文章"></a>发布文章</h3><ol>
-<li>在<code>Git bash</code>中输入以下命令：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&#x27;文章名&#x27;</span></span><br></pre></td></tr></table></figure>
+<li><p>在 Git bash 中输入以下命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new &#x27;文章名&#x27;</span><br></pre></td></tr></table></figure>
 
-<p>新的md文件就会在source&#x2F;_post中自动生成，可自行编辑</p>
-<ol start="2">
-<li>编辑完成，在<code>Git bash</code>中输入以下命令即可发布（以后我们对任何文件进行了改动也是同样如此更新）</li>
+<p>新的md文件就会在<code>source\_post</code>中自动生成，可自行编辑</p>
+</li>
+<li><p>编辑完成，在 Git bash 中输入以下命令即可发布（以后我们对任何文件进行了改动也是同样如此更新）</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d -g</span><br></pre></td></tr></table></figure></li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d -g</span><br></pre></td></tr></table></figure>
-
-<h3 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h3><p>很多人的电脑上的可能不止一个npm或者nodejs，比如笔者就因机器学习安装了Anaconda,而Anaconda有着自己一套环境系统。我可能在学机器学习时改动了一些系统路径（不清楚），总之导致一段时间后我的git bash提示找不到hexo的文件</p>
-<p>这里提供一个使用完整的绝对路径来运行hexo命令的方法</p>
-<p>正确的情况是应该是，nodejs是下载在我们的博客目录的，所以我们使用也应该是我们博客目录下的node_modules的hexo，下面以我的博客目录为例,使用绝对路径来运行发布文章的命令</p>
+<h2 id="可能出现的BUG"><a href="#可能出现的BUG" class="headerlink" title="可能出现的BUG"></a>可能出现的BUG</h2><h3 id="hexo的module找不到"><a href="#hexo的module找不到" class="headerlink" title="hexo的module找不到"></a>hexo的module找不到</h3><p>很多人的电脑上的可能不止一个 npm 或者 nodejs，比如本人就因机器学习安装了 Anaconda，而 Anaconda 有着自己一套环境系统。我可能在学机器学习时改动了一些系统路径（不清楚），总之导致一段时间后我的 git bash 提示找不到 hexo 的文件。</p>
+<p>这里提供一个使用完整的绝对路径来运行 hexo 命令的方法。</p>
+<p>正确的情况是应该是，nodejs 是下载在我们的博客目录的，所以我们使用也应该是我们博客目录下的 node_modules 的 hexo，下面以我的博客目录为例,使用绝对路径来运行发布文章的命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  F:\\Blogs\\node_modules\\hexo-cli\\bin\\hexo d -g</span><br></pre></td></tr></table></figure>
 
-<p>笔者通过这样的方式解决了问题</p>
+<p>本人通过这样的方式解决了问题。</p>
+<h3 id="SSH-连接超时"><a href="#SSH-连接超时" class="headerlink" title="SSH 连接超时"></a>SSH 连接超时</h3><p>即上面提到的<code>connect to host github.com port 22: Connection timed out</code>，在发布文章<code>hexo d -g </code>也可能遇到这个报错，解决办法是一样的。</p>
 <hr>
 <h2 id="hexo主题"><a href="#hexo主题" class="headerlink" title="hexo主题"></a>hexo主题</h2><p>Hexo可选主题的很多，须要另行配置，毕竟默认主题一点个性也没有。<br>我选用的是<a target="_blank" rel="noopener" href="https://github.com/litten/hexo-theme-yilia">yilia</a>，轻量化的一款。</p>
 <hr>
 <h2 id="PicGo-jsdelivr环节"><a href="#PicGo-jsdelivr环节" class="headerlink" title="PicGo+jsdelivr环节"></a>PicGo+jsdelivr环节</h2><p>下载<a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/PicGo/releases">PicGo</a></p>
 <h3 id="Github作为图床网站"><a href="#Github作为图床网站" class="headerlink" title="Github作为图床网站"></a>Github作为图床网站</h3><ol>
-<li>在Github新建一个仓库用于存放图片，这次仓库名没有限制，保证仓库是public即可</li>
-<li>新建token：Settings -&gt; Developer settings -&gt; Personal access tokens，最后点击 generate new token；</li>
-<li>填写<code>Note</code>（描述，你可以填博客图床），<code>Select scopes</code>勾选repo</li>
-<li>token生成，复制下来，下面要用</li>
+<li>在 Github 新建一个仓库用于存放图片，这次仓库名没有限制，保证仓库是 public 即可</li>
+<li>新建 token：Settings -&gt; Developer settings -&gt; Personal access tokens，最后点击 generate new token。</li>
+<li>过期时间自行选择。</li>
+<li>填写<code>Note</code>（描述，你可以填博客图床），<code>Select scopes</code>勾选 repo</li>
+<li>token 生成，复制下来，下面要用</li>
 </ol>
 <h3 id="配置PicGo"><a href="#配置PicGo" class="headerlink" title="配置PicGo"></a>配置PicGo</h3><ol>
 <li><p>依次打开 图床设置 -&gt; Github 图床</p>
@@ -287,16 +315,16 @@
 <li><p>按自己情况填入相关信息 </p>
 <p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202303221725219.png" alt="image-20230322172547192"></p>
 </li>
-<li><p>可以看到设定自定义域名，依照<a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/username/reponame">https://cdn.jsdelivr.net/gh/username/reponame</a> 的格式填写就行，repo那么就是你图床仓库的名字，这样就算用到jsdelivr了</p>
+<li><p>可以看到设定自定义域名，依照<code>https://cdn.jsdelivr.net/gh/username/reponame </code>的格式填写就行，repo 那么就是你图床仓库的名字，这样就算用到 jsdelivr 了</p>
 </li>
-<li><p>如果你使用typora的话，可以在typora的图像设置里面选择配合使用PicGo，插入图片就很方便了。</p>
+<li><p>如果你使用 typora 的话，可以在 typora 的图像设置里面选择配合使用 PicGo，插入图片就很方便了。</p>
 </li>
 </ol>
 <hr>
-<h2 id="写给自己"><a href="#写给自己" class="headerlink" title="写给自己"></a>写给自己</h2><p>害，至于为什么搭这个博客，原因可能真的是考研复习累了。先是学了三四天前端入了个门，然后码了三天字，也就是关于崩三的那几篇文章，最后又花了两天搭建这个博客。前后有一个多礼拜没复习力。</p>
-<p>压力很大啊，身边有不少同学都想考计院（你院真的🐶都不待），好像还有个狠人都已经N轮复习了。</p>
-<p>这些天作息也不太规律，天天到一点睡觉，这可不彳亍。</p>
-<p>是时已是晚上六点，就此搁笔。今晚调整，明天开始重回考研状态力~✨</p>
+<h2 id="写给自己"><a href="#写给自己" class="headerlink" title="写给自己"></a>写给自己</h2><p>至于搭这个博客，原因是考研复习累了。先是学了三四天前端入了个门，然后码了几天字，最后又花了两天搭建这个博客。前后有一个多礼拜没复习力。</p>
+<p>压力很大啊，身边有不少同学都想考计院，好像还有个狠人都已经N轮复习了。</p>
+<p>这些天作息也不太规律，天天到一点睡觉，这不对吧。</p>
+<p>是时已是晚上六点，就此搁笔。今晚调整，明天开始重回考研状态~✨</p>
 <p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202303221816974.jpg" alt="QQ图片20230322181511"></p>
 
       
@@ -419,7 +447,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E6%A1%86%E6%9E%B6%E3%80%81%E8%BD%AF%E4%BB%B6%E3%80%81%E5%B9%B3%E5%8F%B0"><span class="toc-number">1.</span> <span class="toc-text">使用到的框架、软件、平台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Github%E7%8E%AF%E8%8A%82"><span class="toc-number">2.</span> <span class="toc-text">Github环节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="toc-number">2.1.</span> <span class="toc-text">新建仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AESSH"><span class="toc-number">2.2.</span> <span class="toc-text">配置SSH</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nodejs%E7%8E%AF%E8%8A%82"><span class="toc-number">3.</span> <span class="toc-text">nodejs环节</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo%E7%8E%AF%E8%8A%82"><span class="toc-number">4.</span> <span class="toc-text">hexo环节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">4.1.</span> <span class="toc-text">安装与初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6"><span class="toc-number">4.2.</span> <span class="toc-text">生成静态文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E9%A2%84%E8%A7%88"><span class="toc-number">4.3.</span> <span class="toc-text">本地预览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub"><span class="toc-number">4.4.</span> <span class="toc-text">部署到 GitHub</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEHexo%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-number">4.5.</span> <span class="toc-text">配置Hexo基本信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E6%96%87%E7%AB%A0"><span class="toc-number">4.6.</span> <span class="toc-text">发布文章</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">4.7.</span> <span class="toc-text">可能出现的问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo%E4%B8%BB%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">hexo主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PicGo-jsdelivr%E7%8E%AF%E8%8A%82"><span class="toc-number">6.</span> <span class="toc-text">PicGo+jsdelivr环节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Github%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A%E7%BD%91%E7%AB%99"><span class="toc-number">6.1.</span> <span class="toc-text">Github作为图床网站</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEPicGo"><span class="toc-number">6.2.</span> <span class="toc-text">配置PicGo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E7%BB%99%E8%87%AA%E5%B7%B1"><span class="toc-number">7.</span> <span class="toc-text">写给自己</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">博客搭建记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">2.</span> <span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Github"><span class="toc-number">3.</span> <span class="toc-text">Github</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="toc-number">3.1.</span> <span class="toc-text">新建仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AESSH"><span class="toc-number">3.2.</span> <span class="toc-text">配置SSH</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nodejs"><span class="toc-number">4.</span> <span class="toc-text">nodejs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo"><span class="toc-number">5.</span> <span class="toc-text">hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">5.1.</span> <span class="toc-text">安装与初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6"><span class="toc-number">5.2.</span> <span class="toc-text">生成静态文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E9%A2%84%E8%A7%88"><span class="toc-number">5.3.</span> <span class="toc-text">本地预览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub"><span class="toc-number">5.4.</span> <span class="toc-text">部署到 GitHub</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEHexo%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-number">5.5.</span> <span class="toc-text">配置Hexo基本信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E6%96%87%E7%AB%A0"><span class="toc-number">5.6.</span> <span class="toc-text">发布文章</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84BUG"><span class="toc-number">6.</span> <span class="toc-text">可能出现的BUG</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo%E7%9A%84module%E6%89%BE%E4%B8%8D%E5%88%B0"><span class="toc-number">6.1.</span> <span class="toc-text">hexo的module找不到</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-%E8%BF%9E%E6%8E%A5%E8%B6%85%E6%97%B6"><span class="toc-number">6.2.</span> <span class="toc-text">SSH 连接超时</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo%E4%B8%BB%E9%A2%98"><span class="toc-number">7.</span> <span class="toc-text">hexo主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PicGo-jsdelivr%E7%8E%AF%E8%8A%82"><span class="toc-number">8.</span> <span class="toc-text">PicGo+jsdelivr环节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Github%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A%E7%BD%91%E7%AB%99"><span class="toc-number">8.1.</span> <span class="toc-text">Github作为图床网站</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEPicGo"><span class="toc-number">8.2.</span> <span class="toc-text">配置PicGo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E7%BB%99%E8%87%AA%E5%B7%B1"><span class="toc-number">9.</span> <span class="toc-text">写给自己</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -527,10 +555,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">日记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">bug</a>
               </li>
              
@@ -551,15 +575,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Mockito</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">博客建设</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">法典</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
               </li>
             
             <div class="clearfix"></div>
