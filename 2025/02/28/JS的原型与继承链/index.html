@@ -6,16 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Tag: 崩三 | Michael&#39;s Personal Blog</title>
+  <title>JS的原型与继承 | Michael&#39;s Personal Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录生活、技术、哲学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Michael&#39;s Personal Blog">
-<meta property="og:url" content="http://example.com/tags/%E5%B4%A9%E4%B8%89/index.html">
+  <meta name="description" content="在学习JS的过程中，感受到其与经典OOP语言JAVA的较大不同之处。所以写了这篇文章，记录这些不同的地方。至于一些相似的特性，则没有提及。更多了解可以在MDN查阅上相关文档。 概述对于使用过基于类的语言 (如 Java 或 C++) 的开发者们来说，JavaScript 实在是有些令人困惑 —— JavaScript 是动态的，本身不提供一个 class 的实现。即便是在 ES2015&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS的原型与继承">
+<meta property="og:url" content="http://example.com/2025/02/28/JS%E7%9A%84%E5%8E%9F%E5%9E%8B%E4%B8%8E%E7%BB%A7%E6%89%BF%E9%93%BE/index.html">
 <meta property="og:site_name" content="Michael&#39;s Personal Blog">
-<meta property="og:description" content="记录生活、技术、哲学">
+<meta property="og:description" content="在学习JS的过程中，感受到其与经典OOP语言JAVA的较大不同之处。所以写了这篇文章，记录这些不同的地方。至于一些相似的特性，则没有提及。更多了解可以在MDN查阅上相关文档。 概述对于使用过基于类的语言 (如 Java 或 C++) 的开发者们来说，JavaScript 实在是有些令人困惑 —— JavaScript 是动态的，本身不提供一个 class 的实现。即便是在 ES2015&#x2F;">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-02-28T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-02T15:53:37.987Z">
 <meta property="article:author" content="Michael">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Michael&#39;s Personal Blog" type="application/atom+xml">
@@ -140,148 +143,206 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-JS的原型与继承链" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JS的原型与继承
+    </h1>
+  
+
+        
+        <a href="/2025/02/28/JS%E7%9A%84%E5%8E%9F%E5%9E%8B%E4%B8%8E%E7%BB%A7%E6%89%BF%E9%93%BE/" class="archive-article-date">
+  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在学习JS的过程中，感受到其与经典OOP语言JAVA的较大不同之处。所以写了这篇文章，记录这些不同的地方。至于一些相似的特性，则没有提及。更多了解可以在MDN查阅上相关文档。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>对于使用过基于类的语言 (如 Java 或 C++) 的开发者们来说，JavaScript 实在是有些令人困惑 —— JavaScript 是动态的，本身不提供一个 class 的实现。即便是在 ES2015&#x2F;ES6 中引入了 class 关键字，但那也只是语法糖，我们现在确实可以通过类似于Java的方式创建和继承一个“类”，但底层仍然是基于原型的，这个“类”也只是模拟出来的，实际上底层仍是一个对象。下面当我们提到类时，不要忘记这一点。JS中一切皆对象。</p>
+<p>在传统的OOP中，我们通过class关键字定义类，然后在里面写我们的构造函数。JS中并不如此，当我们在写Ball的构造器时，如<code>function Ball()&#123;&#125;</code>，这就已经定义好了一个Ball类，当然我们没有定义任何属性。</p>
+<p>当我们定义好Ball的构造器<code>function Ball()&#123;&#125;</code>，通过上面的了解我们知道，这实际上就是一个对象。在JS中，任何一个对象（除了顶层对象Object，其原型为null），都会自动有一个原型对象。Ball也有一个原型对象，从意义上来说，Ball就是继承自这个原型对象。</p>
+<p>在传统的 OOP 中，首先定义“类”，此后创建对象实例时，类中定义的所有属性和方法都被复制到实例中。在 JavaScript 中并不如此复制——而是在对象实例和它的构造器之间建立一个链接（它是<code>__proto__</code>属性，是从构造函数的<code>prototype</code>属性派生的），之后通过上溯原型链，在构造器中找到这些属性和方法。</p>
+<hr>
+<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><p>当我们这样定义一个Ball类并在JS控制台中输出他的prototype属性</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Ball</span>(<span class="params"></span>)&#123;&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Ball</span>.<span class="property"><span class="keyword">prototype</span></span>);</span><br></pre></td></tr></table></figure>
+<p>结果是这样的:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">constructor</span>: ƒ <span class="title class_">Ball</span>(),</span><br><span class="line">    <span class="attr">__proto__</span>: &#123;</span><br><span class="line">        <span class="attr">constructor</span>: ƒ <span class="title class_">Object</span>(),</span><br><span class="line">        <span class="attr">hasOwnProperty</span>: ƒ <span class="title function_">hasOwnProperty</span>(),</span><br><span class="line">        <span class="attr">isPrototypeOf</span>: ƒ <span class="title function_">isPrototypeOf</span>(),</span><br><span class="line">        <span class="attr">propertyIsEnumerable</span>: ƒ <span class="title function_">propertyIsEnumerable</span>(),</span><br><span class="line">        <span class="attr">toLocaleString</span>: ƒ <span class="title function_">toLocaleString</span>(),</span><br><span class="line">        <span class="attr">toString</span>: ƒ <span class="title function_">toString</span>(),</span><br><span class="line">        <span class="attr">valueOf</span>: ƒ <span class="title function_">valueOf</span>()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就是Ball的原型对象。</p>
+<p>然后创建他的实例对象并在JS控制台中输出其_proto_属性</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> aBall=<span class="keyword">new</span> <span class="title class_">Ball</span>();</span><br><span class="line">aball.<span class="property">getprototypeof</span>;<span class="comment">//Chrome的JS控制台里，只可以通过Object.getPrototypeOf() 和 Object.setPrototypeOf() 访问器来访问_proto_</span></span><br></pre></td></tr></table></figure>
+<p>我们会看到相同的结果。<strong>Ball的<code>prototype</code>和aBall的的<code>\_proto\_</code>指向的就是同一个对象。</strong></p>
+<hr>
+<h2 id="定义我们的类"><a href="#定义我们的类" class="headerlink" title="定义我们的类"></a>定义我们的类</h2><p>事实上，一种极其常见的对象定义模式是，在构造器（函数体）中定义属性、在 <code>prototype</code> 属性上定义方法。如此，构造器只包含属性定义，而方法则分装在不同的代码块，代码更具可读性。例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造器及其属性定义</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Test</span>(<span class="params">a,b,c,d</span>) &#123;</span><br><span class="line">  <span class="comment">// 属性定义</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义第一个方法</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Test</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">x</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义第二个方法</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Test</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">y</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等等……</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="construct属性"><a href="#construct属性" class="headerlink" title="construct属性"></a>construct属性</h2><p>每个实例对象都从原型中继承了一个 <code>constructor</code> 属性，该属性指向了用于构造此实例对象的构造函数。</p>
+<p>例如，在控制台中尝试下面的指令：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">person1.<span class="property">constructor</span></span><br><span class="line">person2.<span class="property">constructor</span></span><br></pre></td></tr></table></figure>
+<p>都将返回 Person() 构造器，因为该构造器包含这些实例的原始定义。 你可以在 <code>constructor</code> 属性的末尾添加一对圆括号（括号中包含所需的参数），从而用这个构造器创建另一个对象实例。毕竟构造器是一个函数，故可以通过圆括号调用；只需在前面添加 new 关键字，便能将此函数作为构造器使用。<br>在控制台中输入：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person3 = <span class="keyword">new</span> person1.<span class="title function_">constructor</span>(<span class="params"><span class="string">&#x27;Karen&#x27;</span>, <span class="string">&#x27;Stephenson&#x27;</span>, <span class="number">26</span>, <span class="string">&#x27;female&#x27;</span>, [<span class="string">&#x27;playing drums&#x27;</span>, <span class="string">&#x27;mountain climbing&#x27;</span>]</span>);</span><br></pre></td></tr></table></figure>
+<p>现在尝试访问新建对象的属性，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">person3.<span class="property">name</span>.<span class="property">first</span></span><br><span class="line">person3.<span class="property">age</span></span><br><span class="line">person3.<span class="title function_">bio</span>()</span><br></pre></td></tr></table></figure>
+<p>正常工作。通常你不会去用这种方法创建新的实例；但如果你刚好因为某些原因没有原始构造器的引用，那么这种方法就很有用了，类似于JAVA的反射应用。</p>
+<hr>
+<h2 id="使用-Object-create-创建的对象"><a href="#使用-Object-create-创建的对象" class="headerlink" title="使用 Object.create 创建的对象"></a>使用 Object.create 创建的对象</h2><p>ECMAScript 5 中引入了一个新方法：Object.create()。可以调用这个方法来创建一个新对象。新对象的原型就是调用 create 方法时传入的第一个参数：</p>
+<hr>
+<h2 id="new一个对象时所发生的的事情"><a href="#new一个对象时所发生的的事情" class="headerlink" title="new一个对象时所发生的的事情"></a>new一个对象时所发生的的事情</h2><p>当你执行：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = <span class="keyword">new</span> <span class="title class_">Foo</span>();</span><br></pre></td></tr></table></figure>
+<p>JavaScript 实际上执行的是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line">o.<span class="property">__proto__</span> = <span class="title class_">Foo</span>.<span class="property"><span class="keyword">prototype</span></span>;</span><br><span class="line"><span class="title class_">Foo</span>.<span class="title function_">call</span>(o);</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何继承一个构造器"><a href="#如何继承一个构造器" class="headerlink" title="如何继承一个构造器"></a>如何继承一个构造器</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面一段是继承某个构造器的标准流程。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Shape</span>(<span class="params">x, y, velX, velY, exists</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">x</span> = x;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">y</span> = y;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">velX</span> = velX;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">velY</span> = velY;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">exists</span> = exists;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 定义Ball构造器，继承自Shape</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Ball</span>(<span class="params">x, y, velX, velY, exists, color, size</span>) &#123;</span><br><span class="line">    <span class="title class_">Shape</span>.<span class="title function_">call</span>(<span class="variable language_">this</span>, x, y, velX, velY, exists);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">color</span> = color;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">size</span> = size;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Ball</span>.<span class="property"><span class="keyword">prototype</span></span> = <span class="title class_">Object</span>.<span class="title function_">create</span>(<span class="title class_">Shape</span>.<span class="property"><span class="keyword">prototype</span></span>);</span><br><span class="line"><span class="title class_">Ball</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">constructor</span> = <span class="title class_">Ball</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2025" class="archive-year">2025</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/">凯文·卡斯兰娜</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">JavaScript</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2025/02/28/JS%E7%9A%84%E5%8E%9F%E5%9E%8B%E4%B8%8E%E7%BB%A7%E6%89%BF%E9%93%BE/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E5%A5%A5%E6%89%98%C2%B7%E9%98%BF%E6%B3%A2%E5%8D%A1%E5%88%A9%E6%96%AF/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2025/03/01/%E6%99%BA%E8%83%BD%E5%8D%8F%E5%90%8C%E4%BA%91%E5%9B%BE%E5%BA%93-readme/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          智能协同云图库-readme
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/02/28/%E3%80%8A%E4%BD%A0%E4%B8%80%E7%94%9F%E7%9A%84%E6%95%85%E4%BA%8B%E3%80%8B%E8%AF%BB%E4%B9%A6%E9%9A%8F%E7%AC%94/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">《你一生的故事》读书随笔</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E5%A5%A5%E6%89%98%C2%B7%E9%98%BF%E6%B3%A2%E5%8D%A1%E5%88%A9%E6%96%AF/">奥托·阿波卡利斯</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BE%E4%BE%8B"><span class="toc-number">2.</span> <span class="toc-text">举例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%88%91%E4%BB%AC%E7%9A%84%E7%B1%BB"><span class="toc-number">3.</span> <span class="toc-text">定义我们的类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#construct%E5%B1%9E%E6%80%A7"><span class="toc-number">4.</span> <span class="toc-text">construct属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Object-create-%E5%88%9B%E5%BB%BA%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.</span> <span class="toc-text">使用 Object.create 创建的对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#new%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%97%B6%E6%89%80%E5%8F%91%E7%94%9F%E7%9A%84%E7%9A%84%E4%BA%8B%E6%83%85"><span class="toc-number">6.</span> <span class="toc-text">new一个对象时所发生的的事情</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%BB%A7%E6%89%BF%E4%B8%80%E4%B8%AA%E6%9E%84%E9%80%A0%E5%99%A8"><span class="toc-number">7.</span> <span class="toc-text">如何继承一个构造器</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E8%8A%BD%E8%A1%A3%E4%B8%8E%E7%88%B1%E8%8E%89%E5%B8%8C%E9%9B%85/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E8%8A%BD%E8%A1%A3%E4%B8%8E%E7%88%B1%E8%8E%89%E5%B8%8C%E9%9B%85/">芽衣与爱莉希雅</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -304,9 +365,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

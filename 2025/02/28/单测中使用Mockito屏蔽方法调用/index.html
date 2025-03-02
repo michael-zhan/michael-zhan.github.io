@@ -6,16 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Tag: 崩三 | Michael&#39;s Personal Blog</title>
+  <title>单测中使用Mockito屏蔽方法调用 | Michael&#39;s Personal Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录生活、技术、哲学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Michael&#39;s Personal Blog">
-<meta property="og:url" content="http://example.com/tags/%E5%B4%A9%E4%B8%89/index.html">
+  <meta name="description" content="概述单元测试的对象往往是类中某一个方法。基于单元测试规范，我们希望测试是独立的，即希望其他方法不会影响我们对这一个方法的测试。但如果在这个方法调用了其他方法，那么独立性就不可避免的受到影响。 这时，我们可以使用Mockito来帮助我们。 在使用Mockito进行单元测试时，如果你的方法调用了同一个类中的另一个方法，你可以使用Mockito.spy()方法来创建一个spy对象，它可以模拟真实对象的行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单测中使用Mockito屏蔽方法调用">
+<meta property="og:url" content="http://example.com/2025/02/28/%E5%8D%95%E6%B5%8B%E4%B8%AD%E4%BD%BF%E7%94%A8Mockito%E5%B1%8F%E8%94%BD%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8/index.html">
 <meta property="og:site_name" content="Michael&#39;s Personal Blog">
-<meta property="og:description" content="记录生活、技术、哲学">
+<meta property="og:description" content="概述单元测试的对象往往是类中某一个方法。基于单元测试规范，我们希望测试是独立的，即希望其他方法不会影响我们对这一个方法的测试。但如果在这个方法调用了其他方法，那么独立性就不可避免的受到影响。 这时，我们可以使用Mockito来帮助我们。 在使用Mockito进行单元测试时，如果你的方法调用了同一个类中的另一个方法，你可以使用Mockito.spy()方法来创建一个spy对象，它可以模拟真实对象的行">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-02-28T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-02T15:44:24.156Z">
 <meta property="article:author" content="Michael">
+<meta property="article:tag" content="技术">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Michael&#39;s Personal Blog" type="application/atom+xml">
@@ -140,148 +143,188 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-单测中使用Mockito屏蔽方法调用" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      单测中使用Mockito屏蔽方法调用
+    </h1>
+  
+
+        
+        <a href="/2025/02/28/%E5%8D%95%E6%B5%8B%E4%B8%AD%E4%BD%BF%E7%94%A8Mockito%E5%B1%8F%E8%94%BD%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>单元测试的对象往往是类中某一个方法。基于单元测试规范，我们希望测试是独立的，即希望其他方法不会影响我们对这一个方法的测试。但如果在这个方法调用了其他方法，那么独立性就不可避免的受到影响。</p>
+<p>这时，我们可以使用<code>Mockito</code>来帮助我们。</p>
+<p>在使用Mockito进行单元测试时，如果你的方法调用了同一个类中的另一个方法，你可以使用Mockito.spy()方法来创建一个spy对象，它可以模拟真实对象的行为，并在需要时改变它们的行为。然后，你可以使用Mockito.doReturn()方法来指定被调用方法的返回值。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>下面是一个示例代码，其中假设你要测试的类是MyClass，其中有两个方法method1和method2，而method1调用了method2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">method1</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> method2();</span><br><span class="line">        <span class="comment">// some more code</span></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">method2</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">42</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，我们想要编写一个单元测试，仅测试method1()方法，但是我们需要确保在测试期间不调用method2()。</p>
+<p>在这种情况下，我们可以使用Spy对象和doReturn()方法来指定method2()方法的返回值。以下是示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.mockito.Mockito;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClassTest</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testMethod1</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">MyClass</span> <span class="variable">myClass</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyClass</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">MyClass</span> <span class="variable">spy</span> <span class="operator">=</span> Mockito.spy(myClass);</span><br><span class="line">        Mockito.doReturn(<span class="number">42</span>).when(spy).method2();</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> spy.method1();</span><br><span class="line"></span><br><span class="line">        assertEquals(<span class="number">42</span>, result);</span><br><span class="line">        verify(spy).method1();</span><br><span class="line">        verify(spy).method2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个测试中：</p>
+<ol>
+<li>我们首先创建了一个<code>MyClass</code>对象，并使用Spy()方法创建一个<code>spy</code>对象。</li>
+<li>然后，我们使用<code>doReturn()</code>方法指定了<code>method2()</code>方法的返回值为42。然后，我们调用<code>method1()</code>方法，并验证它的返回值是否等于42。</li>
+<li>最后，我们使用<code>verify()</code>方法来验证mock对象（spy对象）的方法被正确地调用。</li>
+</ol>
+<p><code>Mockito</code>提供的功能还有很多，比如：</p>
+<ul>
+<li>如果<code>method2()</code>是一个没有返回值的方法,则可以使用<code>doNothing</code>来代替<code>doReturn</code></li>
+<li>如果<code>method2()</code>需要参数，则可以使用<code>Mockito.any()</code>匹配任意类型的参数（不过我使用的时候，匹配int型的参数碰到些空指针问题，没有解决）</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2025" class="archive-year">2025</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/">凯文·卡斯兰娜</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2025/02/28/%E5%8D%95%E6%B5%8B%E4%B8%AD%E4%BD%BF%E7%94%A8Mockito%E5%B1%8F%E8%94%BD%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E5%A5%A5%E6%89%98%C2%B7%E9%98%BF%E6%B3%A2%E5%8D%A1%E5%88%A9%E6%96%AF/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          凯文·卡斯兰娜
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/02/28/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">博客搭建记录</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E5%A5%A5%E6%89%98%C2%B7%E9%98%BF%E6%B3%A2%E5%8D%A1%E5%88%A9%E6%96%AF/">奥托·阿波卡利斯</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.</span> <span class="toc-text">示例</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E8%8A%BD%E8%A1%A3%E4%B8%8E%E7%88%B1%E8%8E%89%E5%B8%8C%E9%9B%85/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E8%8A%BD%E8%A1%A3%E4%B8%8E%E7%88%B1%E8%8E%89%E5%B8%8C%E9%9B%85/">芽衣与爱莉希雅</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -304,9 +347,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
