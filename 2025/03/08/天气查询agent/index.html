@@ -6,17 +6,37 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Tag: 哲学 | Michael&#39;s Personal Blog</title>
+  <title>coze+laf 天气查询agent-开发文档 | Michael&#39;s Personal Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录生活、技术、哲学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Michael&#39;s Personal Blog">
-<meta property="og:url" content="http://example.com/tags/%E5%93%B2%E5%AD%A6/index.html">
+  <meta name="description" content="[TOC] 天气查询agent-开发文档使⽤coze + laf 开发⼀个智能体能解决查天⽓场景，⽀持单轮&#x2F;多轮场景 一、技术栈 Coze  用于智能体对话逻辑，实现单轮&#x2F;多轮交互  LAF (云开发平台)  提供云函数、数据库、API 处理天气天气 天气数据（随机生成） 由 LAF 云函数生成模拟天气数据  二、开发1、laflaf 是开源的云开发平台，提供云函数、云数据库、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="coze+laf 天气查询agent-开发文档">
+<meta property="og:url" content="http://example.com/2025/03/08/%E5%A4%A9%E6%B0%94%E6%9F%A5%E8%AF%A2agent/index.html">
 <meta property="og:site_name" content="Michael&#39;s Personal Blog">
-<meta property="og:description" content="记录生活、技术、哲学">
+<meta property="og:description" content="[TOC] 天气查询agent-开发文档使⽤coze + laf 开发⼀个智能体能解决查天⽓场景，⽀持单轮&#x2F;多轮场景 一、技术栈 Coze  用于智能体对话逻辑，实现单轮&#x2F;多轮交互  LAF (云开发平台)  提供云函数、数据库、API 处理天气天气 天气数据（随机生成） 由 LAF 云函数生成模拟天气数据  二、开发1、laflaf 是开源的云开发平台，提供云函数、云数据库、">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082126060.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082126143.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127155.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127265.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127777.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127453.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127175.png">
+<meta property="og:image" content="d:\Typora\%E7%AC%94%E8%AE%B0\%E7%AC%94%E8%AE%B0\%E5%9B%BE%E7%89%87\image-20250308170302514.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127558.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127615.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082128434.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082128865.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082129624.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082130860.png">
+<meta property="article:published_time" content="2025-03-08T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-08T13:33:57.621Z">
 <meta property="article:author" content="Michael">
+<meta property="article:tag" content="项目文档">
+<meta property="article:tag" content="coze">
+<meta property="article:tag" content="laf">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082126060.png">
   
     <link rel="alternative" href="/atom.xml" title="Michael&#39;s Personal Blog" type="application/atom+xml">
   
@@ -140,228 +160,270 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-天气查询agent" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      coze+laf 天气查询agent-开发文档
+    </h1>
+  
+
+        
+        <a href="/2025/03/08/%E5%A4%A9%E6%B0%94%E6%9F%A5%E8%AF%A2agent/" class="archive-article-date">
+  	<time datetime="2025-03-08T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-03-08</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>[TOC]</p>
+<h1 id="天气查询agent-开发文档"><a href="#天气查询agent-开发文档" class="headerlink" title="天气查询agent-开发文档"></a>天气查询agent-开发文档</h1><p>使⽤coze + laf 开发⼀个智能体能解决查天⽓场景，⽀持单轮&#x2F;多轮场景</p>
+<h2 id="一、技术栈"><a href="#一、技术栈" class="headerlink" title="一、技术栈"></a>一、技术栈</h2><ul>
+<li><strong>Coze</strong>  用于智能体对话逻辑，实现单轮&#x2F;多轮交互 </li>
+<li><strong>LAF (云开发平台)</strong>  提供云函数、数据库、API 处理天气天气</li>
+<li><strong>天气数据（随机生成）</strong> 由 LAF 云函数生成模拟天气数据</li>
+</ul>
+<h2 id="二、开发"><a href="#二、开发" class="headerlink" title="二、开发"></a>二、开发</h2><h3 id="1、laf"><a href="#1、laf" class="headerlink" title="1、laf"></a>1、laf</h3><p><code>laf</code> 是开源的云开发平台，提供云函数、云数据库、云存储等开箱即用的应用资源。</p>
+<p>1）注册登录。</p>
+<p>2）创建应用，开始编写【查询天气API】</p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082126060.png" alt="image-20250308163248267"></p>
+<p>3）函数<code>getWeather()</code>代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params">ctx: FunctionContext</span>) &#123;</span><br><span class="line">  <span class="comment">// 获取请求参数</span></span><br><span class="line">  <span class="keyword">const</span> city = ctx.<span class="property">query</span>.<span class="property">city</span> || <span class="string">&quot;未知城市&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> date = ctx.<span class="property">query</span>.<span class="property">date</span> || <span class="string">&quot;今天&quot;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 🌦 可能的天气类型</span></span><br><span class="line">  <span class="keyword">const</span> weatherTypes = [</span><br><span class="line">    <span class="string">&quot;晴天&quot;</span>, <span class="string">&quot;多云&quot;</span>, <span class="string">&quot;阴天&quot;</span>, <span class="string">&quot;小雨&quot;</span>, <span class="string">&quot;中雨&quot;</span>, <span class="string">&quot;大雨&quot;</span>, <span class="string">&quot;雷暴&quot;</span>, <span class="string">&quot;大雪&quot;</span>, <span class="string">&quot;雾霾&quot;</span>, <span class="string">&quot;沙尘暴&quot;</span></span><br><span class="line">  ];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 🌡️ 生成温度（最低温 &amp; 最高温）</span></span><br><span class="line">  <span class="keyword">const</span> minTemp = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">15</span>) + <span class="number">5</span>;  <span class="comment">// 5°C ~ 20°C</span></span><br><span class="line">  <span class="keyword">const</span> maxTemp = minTemp + <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">10</span>) + <span class="number">5</span>;  <span class="comment">// 高温比低温高 5~15°C</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 🍃 风速 &amp; 风向</span></span><br><span class="line">  <span class="keyword">const</span> windSpeeds = [<span class="string">&quot;1级风&quot;</span>, <span class="string">&quot;2级风&quot;</span>, <span class="string">&quot;3级风&quot;</span>, <span class="string">&quot;4级风&quot;</span>, <span class="string">&quot;5级风&quot;</span>, <span class="string">&quot;6级风&quot;</span>];</span><br><span class="line">  <span class="keyword">const</span> windDirections = [<span class="string">&quot;东风&quot;</span>, <span class="string">&quot;西风&quot;</span>, <span class="string">&quot;南风&quot;</span>, <span class="string">&quot;北风&quot;</span>, <span class="string">&quot;东北风&quot;</span>, <span class="string">&quot;西南风&quot;</span>, <span class="string">&quot;东南风&quot;</span>, <span class="string">&quot;西北风&quot;</span>];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 💧 湿度范围（%）</span></span><br><span class="line">  <span class="keyword">const</span> humidity = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">50</span>) + <span class="number">30</span>; <span class="comment">// 30% ~ 80%</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 🌫️ 空气质量</span></span><br><span class="line">  <span class="keyword">const</span> airQualityLevels = [<span class="string">&quot;优&quot;</span>, <span class="string">&quot;良&quot;</span>, <span class="string">&quot;轻度污染&quot;</span>, <span class="string">&quot;中度污染&quot;</span>, <span class="string">&quot;重度污染&quot;</span>];</span><br><span class="line">  <span class="keyword">const</span> airQuality = airQualityLevels[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * airQualityLevels.<span class="property">length</span>)];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 📅 生成24小时的天气数据</span></span><br><span class="line">  <span class="keyword">const</span> hours = [</span><br><span class="line">    &#123; <span class="attr">time</span>: <span class="string">&quot;06:00&quot;</span>, <span class="attr">weather</span>: <span class="string">&quot;晴天&quot;</span>, <span class="attr">temperature</span>: <span class="string">`<span class="subst">$&#123;minTemp&#125;</span>°C ~ <span class="subst">$&#123;maxTemp&#125;</span>°C`</span>, <span class="attr">wind</span>: <span class="string">`<span class="subst">$&#123;windSpeeds[<span class="number">0</span>]&#125;</span> <span class="subst">$&#123;windDirections[<span class="number">0</span>]&#125;</span>`</span>, <span class="attr">humidity</span>: <span class="string">`<span class="subst">$&#123;humidity&#125;</span>%`</span>, airQuality &#125;,</span><br><span class="line">    &#123; <span class="attr">time</span>: <span class="string">&quot;09:00&quot;</span>, <span class="attr">weather</span>: weatherTypes[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * weatherTypes.<span class="property">length</span>)], <span class="attr">temperature</span>: <span class="string">`<span class="subst">$&#123;minTemp + <span class="number">2</span>&#125;</span>°C ~ <span class="subst">$&#123;maxTemp + <span class="number">2</span>&#125;</span>°C`</span>, <span class="attr">wind</span>: <span class="string">`<span class="subst">$&#123;windSpeeds[<span class="number">1</span>]&#125;</span> <span class="subst">$&#123;windDirections[<span class="number">2</span>]&#125;</span>`</span>, <span class="attr">humidity</span>: <span class="string">`<span class="subst">$&#123;humidity + <span class="number">5</span>&#125;</span>%`</span>, airQuality &#125;,</span><br><span class="line">    &#123; <span class="attr">time</span>: <span class="string">&quot;12:00&quot;</span>, <span class="attr">weather</span>: weatherTypes[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * weatherTypes.<span class="property">length</span>)], <span class="attr">temperature</span>: <span class="string">`<span class="subst">$&#123;minTemp + <span class="number">5</span>&#125;</span>°C ~ <span class="subst">$&#123;maxTemp + <span class="number">5</span>&#125;</span>°C`</span>, <span class="attr">wind</span>: <span class="string">`<span class="subst">$&#123;windSpeeds[<span class="number">2</span>]&#125;</span> <span class="subst">$&#123;windDirections[<span class="number">3</span>]&#125;</span>`</span>, <span class="attr">humidity</span>: <span class="string">`<span class="subst">$&#123;humidity + <span class="number">10</span>&#125;</span>%`</span>, airQuality &#125;,</span><br><span class="line">    &#123; <span class="attr">time</span>: <span class="string">&quot;14:00&quot;</span>, <span class="attr">weather</span>: weatherTypes[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * weatherTypes.<span class="property">length</span>)], <span class="attr">temperature</span>: <span class="string">`<span class="subst">$&#123;minTemp + <span class="number">6</span>&#125;</span>°C ~ <span class="subst">$&#123;maxTemp + <span class="number">6</span>&#125;</span>°C`</span>, <span class="attr">wind</span>: <span class="string">`<span class="subst">$&#123;windSpeeds[<span class="number">3</span>]&#125;</span> <span class="subst">$&#123;windDirections[<span class="number">4</span>]&#125;</span>`</span>, <span class="attr">humidity</span>: <span class="string">`<span class="subst">$&#123;humidity + <span class="number">15</span>&#125;</span>%`</span>, airQuality &#125;,</span><br><span class="line">    &#123; <span class="attr">time</span>: <span class="string">&quot;18:00&quot;</span>, <span class="attr">weather</span>: weatherTypes[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * weatherTypes.<span class="property">length</span>)], <span class="attr">temperature</span>: <span class="string">`<span class="subst">$&#123;minTemp + <span class="number">4</span>&#125;</span>°C ~ <span class="subst">$&#123;maxTemp + <span class="number">4</span>&#125;</span>°C`</span>, <span class="attr">wind</span>: <span class="string">`<span class="subst">$&#123;windSpeeds[<span class="number">4</span>]&#125;</span> <span class="subst">$&#123;windDirections[<span class="number">5</span>]&#125;</span>`</span>, <span class="attr">humidity</span>: <span class="string">`<span class="subst">$&#123;humidity + <span class="number">20</span>&#125;</span>%`</span>, airQuality &#125;,</span><br><span class="line">    &#123; <span class="attr">time</span>: <span class="string">&quot;21:00&quot;</span>, <span class="attr">weather</span>: weatherTypes[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * weatherTypes.<span class="property">length</span>)], <span class="attr">temperature</span>: <span class="string">`<span class="subst">$&#123;minTemp + <span class="number">1</span>&#125;</span>°C ~ <span class="subst">$&#123;maxTemp + <span class="number">1</span>&#125;</span>°C`</span>, <span class="attr">wind</span>: <span class="string">`<span class="subst">$&#123;windSpeeds[<span class="number">1</span>]&#125;</span> <span class="subst">$&#123;windDirections[<span class="number">6</span>]&#125;</span>`</span>, <span class="attr">humidity</span>: <span class="string">`<span class="subst">$&#123;humidity + <span class="number">25</span>&#125;</span>%`</span>, airQuality &#125;</span><br><span class="line">  ];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 📌 组合天气信息</span></span><br><span class="line">  <span class="keyword">const</span> weatherInfo = &#123;</span><br><span class="line">    city,</span><br><span class="line">    date,</span><br><span class="line">    hours</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">status</span>: <span class="string">&quot;success&quot;</span>,</span><br><span class="line">    <span class="attr">data</span>: weatherInfo</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>4）右上角点击发布，得到 【API 调用URL】：<code>https://APPID.laf.run/getWeather</code>。</p>
+<h3 id="2、Coze"><a href="#2、Coze" class="headerlink" title="2、Coze"></a>2、Coze</h3><p>无论你是否有编程基础，你都可以在扣子平台快速搭建一个 AI 智能体。<a target="_blank" rel="noopener" href="https://www.coze.cn/open/docs/guides">官方文档</a></p>
+<p>1）进入 coze 官网，注册登录，点击 -》创建 -》创建智能体。</p>
+<p>2）开发页面</p>
+<img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082126143.png" alt="无标题"  />
+
+<p>主要用到这四个部分：</p>
+<h4 id="1-人设与回复逻辑"><a href="#1-人设与回复逻辑" class="headerlink" title="1.人设与回复逻辑"></a>1.人设与回复逻辑</h4><p>智能体的<strong>人设与回复逻辑</strong>定义了智能体的基本人设，此人设会持续影响智能体在所有会话中的回复效果。建议在人设与回复逻辑中指定<strong>模型的角色、设计回复的语言风格、限制模型的回答范围</strong>，让对话更符合用户预期。</p>
+<ul>
+<li>人设：天气AI助手相关人设，可自定义风格。（过于长，截图中有展示，这里不贴）</li>
+<li><strong>回复逻辑</strong>：<ol start="0">
+<li>回复时，结合历史对话信息。</li>
+<li>从用户的输入中，分析出参数 city 和参数 date 从用户的输入中，分析出参数 city 和参数 date。（用户可能一次查询多天的数据，请仔细分析，每查询一天都要经历下面的步骤，即下面步骤可能重复进行）</li>
+<li>如果历史对话中有相似的查询记录（例如：已经查过了北京-3月8号，现在又查询今天（3月8号）的北京天气），则按照已查询的结果返回给用户即可。</li>
+<li>如果没有相似的记录，则还要分析用户传入的时间是否合理，例如：用户查询距今一年之后的天气是完全不合理的，应该提示用户重新输入；查询距今一年以前的数据认为是合理的。</li>
+<li>如果没有问题，将这两个参数传入到工作流【weatherPredict】中，工作流会返回格式化的查询结果。</li>
+<li>查询结果中包含时间、天气、气温等等，请用格式化的形式，并结合上述人设，清晰、分层次的回复用户。</li>
+<li>如有必要，调用插件【必应搜索】，但是注意：天气数据以工作流返回的数据为准。</li>
+</ol>
+</li>
+</ul>
+<h4 id="2-技能"><a href="#2-技能" class="headerlink" title="2.技能"></a>2.技能</h4><p>如果模型能力可以基本覆盖智能体的功能，则只需要为智能体编写提示词即可。但是如果你为智能体设计的功能无法仅通过模型能力完成，则需要为智能体添加技能，拓展它的能力边界。</p>
+<p>在这里，添加了自定义的工作流【weatherPredict】，用于调用 laf 平台提供的API：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127155.png" alt="shapes at 25-03-08 16.22.24"></p>
+<ul>
+<li>增加一个 HTTP 请求节点，三个节点的参数传递联通。</li>
+<li>HTTP节点：<ul>
+<li>URL：填写laf提供的【API地址】：<code>https://APPID.laf.run/getWeather</code></li>
+<li>请求参数：<code>city</code>   <code>date</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-对话"><a href="#3-对话" class="headerlink" title="3.对话"></a>3.对话</h4><p>可在这里显示智能体提供方信息。</p>
+<h4 id="4-预览与调试"><a href="#4-预览与调试" class="headerlink" title="4.预览与调试"></a>4.预览与调试</h4><p>实时可与智能体 agent 进行对话，调试设计效果。</p>
+<h2 id="三、最终效果"><a href="#三、最终效果" class="headerlink" title="三、最终效果"></a>三、最终效果</h2><ol>
+<li><p>单日多轮次查询（先查询天气，后问是否适合骑行，前后逻辑一致）。</p>
+</li>
+<li><p>重复地点日期的查询结果一致。</p>
+</li>
+<li><p>太久以后的天气查询不合理，提示不会查询。</p>
+</li>
+<li><p>过往天气允许查询。</p>
+</li>
+<li><p>可一次查询三天内数据。</p>
+</li>
+<li><p>用户输入中缺少【地点】或【天气】时，提示用户。</p>
+</li>
+<li><p>不同地点天气数据可对比。</p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127265.png" alt="image-20250308162650013"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127777.png" alt="image-20250308162714738"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127453.png" alt="image-20250308162748875"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127175.png" alt="image-20250308164703578"></p>
+<p><img src="D:\Typora\笔记\笔记\图片\image-20250308170302514.png" alt="image-20250308170302514"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127558.png" alt="image-20250308164727398"></p>
+<h2 id="四、优化"><a href="#四、优化" class="headerlink" title="四、优化"></a>四、优化</h2><h3 id="1、连续多天查询"><a href="#1、连续多天查询" class="headerlink" title="1、连续多天查询"></a>1、连续多天查询</h3><p>测试发现，当用户输入【查询未来连续三天天气】，模型可正常工作；但当查询【未来一周天气变化】时，模型提示操作失败：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082127615.png" alt="image-20250308174100701"></p>
+<p>这是因为之前的多天查询是通过【循环调用工作流】实现的；现在进行优化，将【循环转移到工作流内部】实现多天查询。</p>
+<ol>
+<li><p>重新定义工作流输入参数类型：</p>
+<ul>
+<li><code>city</code></li>
+<li><code>dateList</code></li>
+</ul>
+</li>
+<li><p>新增工作流节点——循环节点，将HTTP请求放在循环体内部循环调用。另外用一个输出节点展示查询过程。</p>
+</li>
+<li><p>增加一个【大模型节点】，整理总结循环体返回的结构化数据。</p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082128434.png" alt="image-20250308204514922"></p>
+<ol start="4">
+<li><p>测试运行结果：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082128865.png" alt="image-20250308204950105"></p>
+</li>
+</ol>
+<h3 id="2、天气数据生成折线图"><a href="#2、天气数据生成折线图" class="headerlink" title="2、天气数据生成折线图"></a>2、天气数据生成折线图</h3><p>引入插件【图表大师】</p>
+<h3 id="3、新建【天气数据格式】知识库，保证回复内容的格式稳定"><a href="#3、新建【天气数据格式】知识库，保证回复内容的格式稳定" class="headerlink" title="3、新建【天气数据格式】知识库，保证回复内容的格式稳定"></a>3、新建【天气数据格式】知识库，保证回复内容的格式稳定</h3><p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082129624.png" alt="image-20250308211226404"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">## 📍 北京 2025-03-08 天气预报</span><br><span class="line"></span><br><span class="line">| 时间段 | 天气状况 | 气温 🌡️ | 风速 💨 | 湿度 💧 | 其他信息 |</span><br><span class="line">|------------|--------------|---------|---------|---------|---------|</span><br><span class="line">| 00:00 - 03:00 | 🌙 晴朗 | 5°C | 2m/s 东风 | 60% | 夜晚微凉，适合睡觉 😴 |</span><br><span class="line">| 03:00 - 06:00 | 🌫️ 多云 | 4°C | 1m/s 东风 | 65% | 轻雾，开车注意安全 🚗 |</span><br><span class="line">| 06:00 - 09:00 | ⛅ 阴天 | 7°C | 3m/s 东南风 | 70% | 适合晨跑 🏃‍♂️ |</span><br><span class="line">| 09:00 - 12:00 | ☀️ 晴天 | 15°C | 5m/s 南风 | 50% | 太阳出来啦，戴墨镜🕶️ |</span><br><span class="line">| 12:00 - 15:00 | 🔥 炎热 | 23°C | 6m/s 西南风 | 40% | 多喝水！避免中暑 🥤 |</span><br><span class="line">| 15:00 - 18:00 | 🌤️ 多云 | 20°C | 4m/s 西风 | 55% | 下午微风拂面 🍃 |</span><br><span class="line">| 18:00 - 21:00 | 🌧️ 小雨 | 14°C | 3m/s 东风 | 75% | 出门记得带伞 ☂️ |</span><br><span class="line">| 21:00 - 00:00 | ⛈️ 雷阵雨 | 10°C | 7m/s 北风 | 80% | 雷雨天注意安全 ⚡ |</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## 📌 未来 3 天趋势</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">| 日期 📅 | 最高气温 🌡️ | 最低气温 ❄️ | 天气状况 ⛅ | 风速 💨 | 适宜活动 🎯 |</span><br><span class="line">|---------|------------|------------|------------|---------|------------|</span><br><span class="line">| 03-09 (周日) | 22°C | 10°C | ⛅ 阴天 | 5m/s | 适合外出游玩 🎡 |</span><br><span class="line">| 03-10 (周一) | 18°C | 8°C | 🌧️ 小雨 | 6m/s | 记得带伞 ☂️ |</span><br><span class="line">| 03-11 (周二) | 12°C | 3°C | 🌨️ 大雪 | 8m/s | 室内活动更佳 🏠 |</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">### ✨ 额外信息</span><br><span class="line">✅ **紫外线指数**：🌞 中等，外出需防晒</span><br><span class="line">✅ **空气质量指数**：💨 良好（AQI 50），适合户外活动</span><br><span class="line">✅ **日出 / 日落**：🌅 06:30 / 🌇 18:10</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、还可以引入语音与文本互转的插件"><a href="#3、还可以引入语音与文本互转的插件" class="headerlink" title="3、还可以引入语音与文本互转的插件"></a>3、还可以引入语音与文本互转的插件</h3><h3 id="4、Laf-层可以增加多个天气数据源，提高稳定性"><a href="#4、Laf-层可以增加多个天气数据源，提高稳定性" class="headerlink" title="4、Laf 层可以增加多个天气数据源，提高稳定性"></a>4、Laf 层可以增加多个天气数据源，提高稳定性</h3><p>示例代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cloud <span class="keyword">from</span> <span class="string">&quot;@lafjs/cloud&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 🌍 多 API 兜底，优先使用外部 API，失败时返回随机天气数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">getWeatherFromAPIs</span>(<span class="params">city: <span class="built_in">string</span>, date: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> apiList = [</span><br><span class="line">    <span class="string">`https://api.weather1.com/query?city=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(city)&#125;</span>&amp;date=<span class="subst">$&#123;date&#125;</span>`</span>,</span><br><span class="line">    <span class="string">`https://api.weather2.com/weather?location=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(city)&#125;</span>&amp;day=<span class="subst">$&#123;date&#125;</span>`</span>,</span><br><span class="line">    <span class="string">`https://api.weather3.com/v1/weather?place=<span class="subst">$&#123;<span class="built_in">encodeURIComponent</span>(city)&#125;</span>&amp;date=<span class="subst">$&#123;date&#125;</span>`</span>,</span><br><span class="line">  ];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> api <span class="keyword">of</span> apiList) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> response = <span class="keyword">await</span> cloud.<span class="title function_">fetch</span>(api);</span><br><span class="line">      <span class="keyword">if</span> (response.<span class="property">status</span> &gt;= <span class="number">200</span> &amp;&amp; response.<span class="property">status</span> &lt; <span class="number">300</span>) &#123;  <span class="comment">// ✅ 正确的状态检查</span></span><br><span class="line">        <span class="keyword">const</span> data = response.<span class="property">data</span>;</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">`⚠️ API 请求失败: <span class="subst">$&#123;api&#125;</span>`</span>, error);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 所有 API 失败，返回模拟数据</span></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">generateMockWeatherData</span>(city, date);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 🛠️ 生成随机天气数据（API 兜底）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">generateMockWeatherData</span>(<span class="params">city: <span class="built_in">string</span>, date: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> weatherTypes = [<span class="string">&quot;☀️ 晴天&quot;</span>, <span class="string">&quot;⛅ 多云&quot;</span>, <span class="string">&quot;🌧️ 小雨&quot;</span>, <span class="string">&quot;⛈️ 雷暴&quot;</span>, <span class="string">&quot;❄️ 大雪&quot;</span>, <span class="string">&quot;🌫️ 雾霾&quot;</span>];</span><br><span class="line">  <span class="keyword">const</span> windSpeeds = [<span class="string">&quot;1级风&quot;</span>, <span class="string">&quot;2级风&quot;</span>, <span class="string">&quot;3级风&quot;</span>, <span class="string">&quot;4级风&quot;</span>, <span class="string">&quot;5级风&quot;</span>];</span><br><span class="line">  <span class="keyword">const</span> windDirections = [<span class="string">&quot;东风&quot;</span>, <span class="string">&quot;西风&quot;</span>, <span class="string">&quot;南风&quot;</span>, <span class="string">&quot;北风&quot;</span>, <span class="string">&quot;东北风&quot;</span>, <span class="string">&quot;西南风&quot;</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> minTemp = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">10</span>) + <span class="number">5</span>; <span class="comment">// 5°C ~ 15°C</span></span><br><span class="line">  <span class="keyword">const</span> maxTemp = minTemp + <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">10</span>) + <span class="number">5</span>; <span class="comment">// +5 ~ 15°C</span></span><br><span class="line">  <span class="keyword">const</span> humidity = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">50</span>) + <span class="number">30</span>; <span class="comment">// 30% ~ 80%</span></span><br><span class="line">  <span class="keyword">const</span> airQualityLevels = [<span class="string">&quot;优&quot;</span>, <span class="string">&quot;良&quot;</span>, <span class="string">&quot;轻度污染&quot;</span>, <span class="string">&quot;中度污染&quot;</span>, <span class="string">&quot;重度污染&quot;</span>];</span><br><span class="line">  <span class="keyword">const</span> airQuality = airQualityLevels[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * airQualityLevels.<span class="property">length</span>)];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> hours = [<span class="string">&quot;06:00&quot;</span>, <span class="string">&quot;09:00&quot;</span>, <span class="string">&quot;12:00&quot;</span>, <span class="string">&quot;15:00&quot;</span>, <span class="string">&quot;18:00&quot;</span>, <span class="string">&quot;21:00&quot;</span>].<span class="title function_">map</span>(<span class="function">(<span class="params">time</span>) =&gt;</span> (&#123;</span><br><span class="line">    time,</span><br><span class="line">    <span class="attr">weather</span>: weatherTypes[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * weatherTypes.<span class="property">length</span>)],</span><br><span class="line">    <span class="attr">temperature</span>: <span class="string">`<span class="subst">$&#123;minTemp + <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">5</span>)&#125;</span>°C ~ <span class="subst">$&#123;maxTemp + <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">5</span>)&#125;</span>°C`</span>,</span><br><span class="line">    <span class="attr">wind</span>: <span class="string">`<span class="subst">$&#123;windSpeeds[<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * windSpeeds.length)]&#125;</span> <span class="subst">$&#123;windDirections[<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * windDirections.length)]&#125;</span>`</span>,</span><br><span class="line">    <span class="attr">humidity</span>: <span class="string">`<span class="subst">$&#123;humidity + <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">20</span>)&#125;</span>%`</span>,</span><br><span class="line">    airQuality,</span><br><span class="line">  &#125;));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    city,</span><br><span class="line">    date,</span><br><span class="line">    <span class="attr">today</span>: &#123; minTemp, maxTemp, airQuality &#125;,</span><br><span class="line">    hours,</span><br><span class="line">    <span class="attr">forecast</span>: <span class="title function_">generateFutureWeather</span>(city),</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 📅 生成未来 3 天的天气预报</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">generateFutureWeather</span>(<span class="params">city: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> weatherTypes = [<span class="string">&quot;☀️ 晴天&quot;</span>, <span class="string">&quot;🌧️ 小雨&quot;</span>, <span class="string">&quot;⛈️ 雷暴&quot;</span>, <span class="string">&quot;❄️ 大雪&quot;</span>, <span class="string">&quot;🌫️ 雾霾&quot;</span>];</span><br><span class="line">  <span class="keyword">return</span> [...<span class="title class_">Array</span>(<span class="number">3</span>)].<span class="title function_">map</span>(<span class="function">(<span class="params">_, i</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> minTemp = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">10</span>) + <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">const</span> maxTemp = minTemp + <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">10</span>) + <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">date</span>: <span class="string">`+<span class="subst">$&#123;i + <span class="number">1</span>&#125;</span> 天`</span>,</span><br><span class="line">      <span class="attr">weather</span>: weatherTypes[<span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * weatherTypes.<span class="property">length</span>)],</span><br><span class="line">      <span class="attr">temperature</span>: <span class="string">`<span class="subst">$&#123;minTemp&#125;</span>°C ~ <span class="subst">$&#123;maxTemp&#125;</span>°C`</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 📌 主入口</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params">ctx: FunctionContext</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> city = ctx.<span class="property">query</span>.<span class="property">city</span> || <span class="string">&quot;未知城市&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> date = ctx.<span class="property">query</span>.<span class="property">date</span> || <span class="string">&quot;今天&quot;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 🌍 查询天气数据（API + 兜底）</span></span><br><span class="line">  <span class="keyword">const</span> weatherData = <span class="keyword">await</span> <span class="title function_">getWeatherFromAPIs</span>(city, date);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 📊 返回 Markdown 格式化数据</span></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">status</span>: <span class="string">&quot;success&quot;</span>,</span><br><span class="line">    <span class="attr">data</span>: weatherData,</span><br><span class="line">    <span class="attr">markdown</span>: <span class="title function_">generateMarkdown</span>(weatherData),</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 📊 生成 Markdown 格式天气信息</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">generateMarkdown</span>(<span class="params">weatherData: <span class="built_in">any</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; city, date, today, hours, forecast &#125; = weatherData;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> md = <span class="string">`## 📍 <span class="subst">$&#123;city&#125;</span> - <span class="subst">$&#123;date&#125;</span> 天气预报\n\n`</span>;</span><br><span class="line">  md += <span class="string">`🌡 **温度:** <span class="subst">$&#123;today.minTemp&#125;</span>°C ~ <span class="subst">$&#123;today.maxTemp&#125;</span>°C  \n`</span>;</span><br><span class="line">  md += <span class="string">`💨 **空气质量:** <span class="subst">$&#123;today.airQuality&#125;</span>  \n\n`</span>;</span><br><span class="line"></span><br><span class="line">  md += <span class="string">`### ⏳ 今日分时天气\n\n`</span>;</span><br><span class="line">  md += <span class="string">`| 时间 ⏰ | 天气 ☁️ | 温度 🌡 | 风 🌬 | 湿度 💧 | 空气质量 🍃 |\n`</span>;</span><br><span class="line">  md += <span class="string">`|--------|--------|--------|--------|--------|--------|\n`</span>;</span><br><span class="line">  hours.<span class="title function_">forEach</span>(<span class="function">(<span class="params">h: <span class="built_in">any</span></span>) =&gt;</span> &#123;</span><br><span class="line">    md += <span class="string">`| <span class="subst">$&#123;h.time&#125;</span> | <span class="subst">$&#123;h.weather&#125;</span> | <span class="subst">$&#123;h.temperature&#125;</span> | <span class="subst">$&#123;h.wind&#125;</span> | <span class="subst">$&#123;h.humidity&#125;</span> | <span class="subst">$&#123;h.airQuality&#125;</span> |\n`</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  md += <span class="string">`\n### 📅 未来 3 天天气预报\n\n`</span>;</span><br><span class="line">  md += <span class="string">`| 日期 📆 | 天气 ⛅ | 温度 🌡 |\n`</span>;</span><br><span class="line">  md += <span class="string">`|--------|--------|--------|\n`</span>;</span><br><span class="line">  forecast.<span class="title function_">forEach</span>(<span class="function">(<span class="params">f: <span class="built_in">any</span></span>) =&gt;</span> &#123;</span><br><span class="line">    md += <span class="string">`| <span class="subst">$&#123;f.date&#125;</span> | <span class="subst">$&#123;f.weather&#125;</span> | <span class="subst">$&#123;f.temperature&#125;</span> |\n`</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> md;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>新 API <code>getWeatherPro</code>测试结果：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503082130860.png" alt="image-20250308212147183"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2025" class="archive-year">2025</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E3%80%8A%E4%BD%A0%E4%B8%80%E7%94%9F%E7%9A%84%E6%95%85%E4%BA%8B%E3%80%8B%E8%AF%BB%E4%B9%A6%E9%9A%8F%E7%AC%94/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E3%80%8A%E4%BD%A0%E4%B8%80%E7%94%9F%E7%9A%84%E6%95%85%E4%BA%8B%E3%80%8B%E8%AF%BB%E4%B9%A6%E9%9A%8F%E7%AC%94/">《你一生的故事》读书随笔</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">项目文档</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/">凯文·卡斯兰娜</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">coze</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">laf</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2025/03/08/%E5%A4%A9%E6%B0%94%E6%9F%A5%E8%AF%A2agent/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E5%A5%A5%E6%89%98%C2%B7%E9%98%BF%E6%B3%A2%E5%8D%A1%E5%88%A9%E6%96%AF/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2025/03/01/%E4%BC%99%E4%BC%B4%E5%8C%B9%E9%85%8D%E9%A1%B9%E7%9B%AE-readme/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">伙伴匹配项目-readme</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E5%A5%A5%E6%89%98%C2%B7%E9%98%BF%E6%B3%A2%E5%8D%A1%E5%88%A9%E6%96%AF/">奥托·阿波卡利斯</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A9%E6%B0%94%E6%9F%A5%E8%AF%A2agent-%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3"><span class="toc-number">1.</span> <span class="toc-text">天气查询agent-开发文档</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.1.</span> <span class="toc-text">一、技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%BC%80%E5%8F%91"><span class="toc-number">1.2.</span> <span class="toc-text">二、开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81laf"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、laf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81Coze"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、Coze</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%BA%BA%E8%AE%BE%E4%B8%8E%E5%9B%9E%E5%A4%8D%E9%80%BB%E8%BE%91"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">1.人设与回复逻辑</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%8A%80%E8%83%BD"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">2.技能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AF%B9%E8%AF%9D"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">3.对话</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%A2%84%E8%A7%88%E4%B8%8E%E8%B0%83%E8%AF%95"><span class="toc-number">1.2.2.4.</span> <span class="toc-text">4.预览与调试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%80%E7%BB%88%E6%95%88%E6%9E%9C"><span class="toc-number">1.3.</span> <span class="toc-text">三、最终效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BC%98%E5%8C%96"><span class="toc-number">1.4.</span> <span class="toc-text">四、优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%BF%9E%E7%BB%AD%E5%A4%9A%E5%A4%A9%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.4.1.</span> <span class="toc-text">1、连续多天查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%A4%A9%E6%B0%94%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%E6%8A%98%E7%BA%BF%E5%9B%BE"><span class="toc-number">1.4.2.</span> <span class="toc-text">2、天气数据生成折线图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%96%B0%E5%BB%BA%E3%80%90%E5%A4%A9%E6%B0%94%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E3%80%91%E7%9F%A5%E8%AF%86%E5%BA%93%EF%BC%8C%E4%BF%9D%E8%AF%81%E5%9B%9E%E5%A4%8D%E5%86%85%E5%AE%B9%E7%9A%84%E6%A0%BC%E5%BC%8F%E7%A8%B3%E5%AE%9A"><span class="toc-number">1.4.3.</span> <span class="toc-text">3、新建【天气数据格式】知识库，保证回复内容的格式稳定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%BF%98%E5%8F%AF%E4%BB%A5%E5%BC%95%E5%85%A5%E8%AF%AD%E9%9F%B3%E4%B8%8E%E6%96%87%E6%9C%AC%E4%BA%92%E8%BD%AC%E7%9A%84%E6%8F%92%E4%BB%B6"><span class="toc-number">1.4.4.</span> <span class="toc-text">3、还可以引入语音与文本互转的插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81Laf-%E5%B1%82%E5%8F%AF%E4%BB%A5%E5%A2%9E%E5%8A%A0%E5%A4%9A%E4%B8%AA%E5%A4%A9%E6%B0%94%E6%95%B0%E6%8D%AE%E6%BA%90%EF%BC%8C%E6%8F%90%E9%AB%98%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="toc-number">1.4.5.</span> <span class="toc-text">4、Laf 层可以增加多个天气数据源，提高稳定性</span></a></li></ol></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E8%8A%BD%E8%A1%A3%E4%B8%8E%E7%88%B1%E8%8E%89%E5%B8%8C%E9%9B%85/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E8%8A%BD%E8%A1%A3%E4%B8%8E%E7%88%B1%E8%8E%89%E5%B8%8C%E9%9B%85/">芽衣与爱莉希雅</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E8%A5%BF%E6%96%B9%E5%93%B2%E5%AD%A6%E5%8F%B2/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E8%A5%BF%E6%96%B9%E5%93%B2%E5%AD%A6%E5%8F%B2/">西方哲学史</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -384,9 +446,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
