@@ -6,17 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives | Michael&#39;s Personal Blog</title>
+  <title>Java-并发与锁 | Michael&#39;s Personal Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录生活、技术、哲学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Michael&#39;s Personal Blog">
-<meta property="og:url" content="http://example.com/archives/page/2/index.html">
+  <meta name="description" content="[TOC] Java-锁与并发一切还要从一个场景出发：  ArrayList是一个线程不安全的集合，请封装它的增删改查方法，实现线程安全。  一、开始这很简单，我们有两个实现思路：synchronized或者lock。不多解释，直接看代码： 1234567891011121314151617181920212223242526272829303132333435363738394041424344">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-并发与锁">
+<meta property="og:url" content="http://example.com/2025/03/14/Java-%E5%B9%B6%E5%8F%91%E4%B8%8E%E9%94%81/index.html">
 <meta property="og:site_name" content="Michael&#39;s Personal Blog">
-<meta property="og:description" content="记录生活、技术、哲学">
+<meta property="og:description" content="[TOC] Java-锁与并发一切还要从一个场景出发：  ArrayList是一个线程不安全的集合，请封装它的增删改查方法，实现线程安全。  一、开始这很简单，我们有两个实现思路：synchronized或者lock。不多解释，直接看代码： 1234567891011121314151617181920212223242526272829303132333435363738394041424344">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:\Typora\%E7%AC%94%E8%AE%B0\%E7%AC%94%E8%AE%B0\%E5%9B%BE%E7%89%87\image-20250313012231332.png">
+<meta property="og:image" content="d:\Typora\%E7%AC%94%E8%AE%B0\%E7%AC%94%E8%AE%B0\%E5%9B%BE%E7%89%87\202503140039790.png">
+<meta property="article:published_time" content="2025-03-13T16:42:38.000Z">
+<meta property="article:modified_time" content="2025-03-13T16:45:11.840Z">
 <meta property="article:author" content="Michael">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="锁">
+<meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:\Typora\%E7%AC%94%E8%AE%B0\%E7%AC%94%E8%AE%B0\%E5%9B%BE%E7%89%87\image-20250313012231332.png">
   
     <link rel="alternative" href="/atom.xml" title="Michael&#39;s Personal Blog" type="application/atom+xml">
   
@@ -140,196 +148,314 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Java-并发与锁" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java-并发与锁
+    </h1>
+  
+
+        
+        <a href="/2025/03/14/Java-%E5%B9%B6%E5%8F%91%E4%B8%8E%E9%94%81/" class="archive-article-date">
+  	<time datetime="2025-03-13T16:42:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-03-14</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>[TOC]</p>
+<h1 id="Java-锁与并发"><a href="#Java-锁与并发" class="headerlink" title="Java-锁与并发"></a>Java-锁与并发</h1><p>一切还要从一个场景出发：</p>
+<blockquote>
+<p>ArrayList是一个线程不安全的集合，请封装它的增删改查方法，实现线程安全。</p>
+</blockquote>
+<h2 id="一、开始"><a href="#一、开始" class="headerlink" title="一、开始"></a>一、开始</h2><p>这很简单，我们有两个实现思路：<code>synchronized</code>或者<code>lock</code>。不多解释，直接看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> safeList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Michael</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SynchronizedSafeList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Object&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Object obj)</span> &#123;</span><br><span class="line">        list.add(obj);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        list.remove(index);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(<span class="type">int</span> index,Object obj)</span> &#123;</span><br><span class="line">        list.set(index,obj);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> Object <span class="title function_">get</span><span class="params">(<span class="type">int</span> index)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> list.get(index);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> safeList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Michael</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReentrantLockSafeList</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;Object&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock lock=<span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Object obj)</span>&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            list.add(obj);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(<span class="type">int</span> index)</span>&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            list.remove(index);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(<span class="type">int</span> index,Object obj)</span>&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            list.set(index,obj);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">get</span><span class="params">(<span class="type">int</span> index)</span>&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> list.get(index);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不管是用<code>synchronized</code>还是<code>lock</code>，都是给四个方法简单粗暴的上了锁，这样能够实现写写互斥、读写互斥、读读互斥——唉，这不对吧，读读是不应该互斥的。</p>
+<p><code>lock</code>还有另一个实现类：<code>ReentrantReadWriteLock</code>，可以帮助我们实现读写锁分离，读读之间不互斥，直接看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> safeList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantReadWriteLock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Michael</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReentrantReadWriteLockSafeList</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Object&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ReentrantReadWriteLock lock=<span class="keyword">new</span> <span class="title class_">ReentrantReadWriteLock</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Object obj)</span>&#123;</span><br><span class="line">        lock.writeLock().lock();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            list.add(obj);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.writeLock().unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(<span class="type">int</span> index)</span>&#123;</span><br><span class="line">        lock.writeLock().lock();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            list.remove(index);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.writeLock().unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(<span class="type">int</span> index,Object obj)</span>&#123;</span><br><span class="line">        lock.writeLock().lock();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            list.set(index,obj);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.writeLock().unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">get</span><span class="params">(<span class="type">int</span> index)</span>&#123;</span><br><span class="line">        lock.readLock().lock();</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> list.get(index);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.readLock().unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，我们就完成了对一个<code>ArrayList</code>的增删改查封装，保证了线程安全。</p>
+<p>这是我在面试时被问的一道题目，其实我对上面的做法还是很在意：直接使用<code>ReentrantReadWriteLock</code>似乎有点过于轮椅了，只要知道这个类，就可以轻松的实现要求。</p>
+<p>那么能不能给自己上点难度，提高一点程序设计理解呢？OK，于是一个机灵，我决定自己实现一个简单的<code>MyReadWriteLock</code>，不求细节，思路为主。</p>
+<h2 id="二、MyReadWriteLock"><a href="#二、MyReadWriteLock" class="headerlink" title="二、MyReadWriteLock"></a>二、MyReadWriteLock</h2><h3 id="1、联想到信号量"><a href="#1、联想到信号量" class="headerlink" title="1、联想到信号量"></a>1、联想到信号量</h3><p>我想到了一个很类似的场景：操作系统进程与线程的【读者-写者】问题：有读者和写者两组并发进程，共享一个文件，要求：</p>
+<ul>
+<li>允许多个读者可以同时对文件执行读操作</li>
+<li>只允许一个写者往文件中写信息</li>
+<li>任何一个写者在完成写操作之前不逊于其他读者或写者工作。</li>
+</ul>
+<p>要求2、3很好实现，只要为文件设一个信号量<code>rw</code>，然后用<code>P</code>、<code>V</code>操作同步即可。稍难一点的地方在于：怎么保证读读之间不互斥？</p>
+<p>我们的做法是：设置一个变量<code>readCount</code>表示当前读进程的数量。当每次读进程要对信号量<code>rw</code>进行<code>P</code>操作时，先检查<code>readCount</code>是否等于0，如果等于，说明这是第一个读进程，那么执行<code>P(rw)</code>；如果不等于0，说明已经有读进程在占用文件了，其他读进程可以直接读，但是不用<code>P(rw)</code>，只需要把<code>readCount++</code>就可以了。</p>
+<p>我们就参考这种思路来实现一下。</p>
+<h3 id="2、实现"><a href="#2、实现" class="headerlink" title="2、实现"></a>2、实现</h3><p>下面的方法：</p>
+<ul>
+<li>用<code>synchronized</code>关键字来保证原子性。</li>
+<li>用<code>wait()</code>和<code>notifuAll()</code>实现等待和唤醒线程。</li>
+<li>附上一提，我们不需要用<code>volatile</code>保证变量的可见性，因为<code>synchronized</code>也包括了保证可见性。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyReadWriteLock</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">int</span> readCount=<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">boolean</span> writeFlag=<span class="literal">false</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">readLock</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(writeFlag)&#123;</span><br><span class="line">      wait();</span><br><span class="line">    &#125;</span><br><span class="line">    readCount++;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">writeLock</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(writeFlag||readCount&gt;<span class="number">0</span>)&#123;</span><br><span class="line">      wait();</span><br><span class="line">    &#125;</span><br><span class="line">    writeFlag=<span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">readUnlock</span><span class="params">()</span>&#123;</span><br><span class="line">    readCount--;</span><br><span class="line">    <span class="keyword">if</span>(readCount==<span class="number">0</span>)&#123;</span><br><span class="line">      notifyAll();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">writeUnlock</span><span class="params">()</span>&#123;</span><br><span class="line">    writeFlag=<span class="literal">false</span>;</span><br><span class="line">    notifyAll();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>OK，这样我就根据自己的理解，设计了一个<code>MyReadWriteLock</code>的实现方案——然而，<strong>这其实是一坨</strong>。</p>
+<ul>
+<li><p>看看我是使用什么保证操作之间的原子性的？</p>
+<p><strong>synchronized</strong>——它是Java底层实现的锁机制，特点是重量级，随意使用<code>synchronized</code>会导致并发性能严重降低；相对来说，<code>lock</code>的机制就要稍轻量一些。</p>
+</li>
+<li><p>我有保证线程上的锁只能被自己释放吗？</p>
+<p>没有，如果有两个线程用我这套锁去同步，那一个线程完全可以不讲武德：不进行<code>writeLock()</code>或者<code>readLock()</code>，直接先<code>writeUnlock()</code>或者<code>readUnlock()</code>，把别人的锁释放了，自己再锁上；另一个线程也可以如此。那所谓的锁机制不就成了君子协定了吗？</p>
+</li>
+<li><p>进程间是怎么样通信的？</p>
+<p>使用的是 Java 自带的<code>wait()</code>和<code>notifyAll()</code>，这还是要建立在使用<code>synchronized</code>的基础上——<strong>这些方法只能在 <code>synchronized</code> 代码块或 <code>synchronized</code> 方法中使用</strong>，否则会抛出 <code>IllegalMonitorStateException</code>。</p>
+<p>而且，<code>notifyAll()</code>是唤醒所有线程，那么这些线程又要全部起来竞争一下这把锁，又消耗了一波CPU资源。</p>
+</li>
+</ul>
+<p>所以我又想：那<code>lock</code>的底层实现是什么？能不能借鉴学习一下？</p>
+<h2 id="三、Lock的底层实现原理"><a href="#三、Lock的底层实现原理" class="headerlink" title="三、Lock的底层实现原理"></a>三、Lock的底层实现原理</h2><p>Java 主要提供了两种方式来实现锁：</p>
+<ul>
+<li><code>synchronized</code> 关键字（JVM 层面）</li>
+<li><code>Lock</code> 接口（ReentrantLock 等）</li>
+</ul>
+<p>这两种方式的底层实现都依赖于 <strong>CAS、自旋、锁升级机制等技术</strong>。</p>
+<h3 id="1、CAS（Compare-And-Swap）"><a href="#1、CAS（Compare-And-Swap）" class="headerlink" title="1、CAS（Compare And Swap）"></a>1、CAS（Compare And Swap）</h3><p>CAS 是 <strong>无锁编程</strong>（Lock-Free）中常用的<strong>原子操作</strong>，它通过硬件指令来保证 <strong>某个变量的更新是线程安全的</strong>，避免使用互斥锁（<code>synchronized</code>），提高性能。如果你知道数据库中的【乐观锁】，那下面的原理一定非常好理解。</p>
+<p><strong>核心原理</strong>：</p>
+<p>1）CAS需要三个值</p>
+<ul>
+<li><code>V</code>：当前内存中的实际值</li>
+<li><code>E</code>：旧值</li>
+<li><code>N</code>：新值</li>
+</ul>
+<p>2）只有当<code>V=E</code>时，才会将<code>V</code>更新为<code>N</code>；否则说明已经有其他线程修改了<code>V</code>，本次操作失败。</p>
+<p>也就是说，CAS操作其实就是根据【乐观锁思想】保证了下面操作的原子性：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if(V==E)&#123;</span><br><span class="line">	 V=N;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3）示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">AtomicINteger</span> <span class="variable">atomicInt</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>(<span class="number">0</span>);</span><br><span class="line"><span class="comment">// 先比较，只要当【当前值】等于【旧值】0时，才会更新为【新值】10</span></span><br><span class="line"><span class="comment">// CAS 操作是原子性的</span></span><br><span class="line">atominInt.compareAndSet(<span class="number">0</span>,<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、自旋锁（Spin-Lock）"><a href="#2、自旋锁（Spin-Lock）" class="headerlink" title="2、自旋锁（Spin Lock）"></a>2、自旋锁（Spin Lock）</h3><p>自旋锁是一种非阻塞锁概念，当线程想要占用锁时：</p>
+<ul>
+<li>如果锁被占用，线程不会进入阻塞，而是<strong>循环检查锁是否被释放</strong>，这种<strong>忙等待</strong>的方式称为<strong>自旋</strong>。</li>
+</ul>
+<h3 id="3、Lock溯源"><a href="#3、Lock溯源" class="headerlink" title="3、Lock溯源"></a>3、Lock溯源</h3><p>Lock的实现过程有这么几个关键词：</p>
+<ul>
+<li>int 类型状态</li>
+<li>双向链表</li>
+<li>CAS+自旋。</li>
+</ul>
+<p>在lock的构造函数中，定义了一个<strong>NonFairSync</strong>，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">ReentrantLock</span><span class="params">()</span> &#123;</span><br><span class="line">  sync = <span class="keyword">new</span> <span class="title class_">NonfairSync</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>NonfairSync</strong> 又是继承于<strong>Sync</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">NonfairSync</span> <span class="keyword">extends</span> <span class="title class_">Sync</span></span><br></pre></td></tr></table></figure>
+
+<p>一步一步往上找，找到了<strong>AbstractQueuedSynchronizer</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Sync</span> <span class="keyword">extends</span> <span class="title class_">AbstractQueuedSynchronizer</span></span><br></pre></td></tr></table></figure>
+
+<p>最后这个鬼，又是继承于<strong>AbstractOwnableSynchronizer</strong>(AOS)。</p>
+<p>他们之间的关系如图：</p>
+<p><img src="D:\Typora\笔记\笔记\图片\image-20250313012231332.png" alt="image-20250313012231332"></p>
+<ul>
+<li>AOS主要是保存获取当前锁的线程对象。</li>
+<li>FairSync 与 NonfairSync的区别在于，是不是保证获取锁的公平性，因为默认是NonfairSync。</li>
+<li>AQS中包含了主要的代码。</li>
+</ul>
+<h3 id="4、手写MyLock"><a href="#4、手写MyLock" class="headerlink" title="4、手写MyLock"></a>4、手写MyLock</h3><p>这是我们的测试<code>main</code>函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LockExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">int</span>[] count = &#123;<span class="number">100</span>&#125;;</span><br><span class="line">        MyLock myLock=<span class="keyword">new</span> <span class="title class_">MyLock</span>();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        Thread[] threads=<span class="keyword">new</span> <span class="title class_">Thread</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                    myLock.lock();</span><br><span class="line">                    count[<span class="number">0</span>]--;</span><br><span class="line">                    myLock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            threads[i]=thread;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            threads[i].start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            threads[i].join();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(count[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是目前的锁：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyLock</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> volid <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们顺着思路，一步一步填充MyLock。</p>
+<p><strong>1、多线程同步的基础是锁，那么锁到底做了什么呢</strong>？</p>
+<p>先lock()，这里lock是需要阻塞的，如果没有阻塞则成功返回，表示拿到了锁。</p>
+<p>那么我们写一个循环，并且调用一个原子操作 CAS，如果原子操作成功了，就返回；如果失败了，就一直循环，相当于阻塞。</p>
+<p>那释放锁自然是把<code>flag</code>置回 false。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyLock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicBoolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicBoolean</span>(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        flag.compareAndSet(<span class="literal">true</span>, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>2、如果能完成第一步，那么我们 LockExample 中的多线程执行就能够得到正确的结果，说明我们已经实现了一个简易锁</strong>。</p>
+<p>看看我们还有没有其他的问题？有的。</p>
+<p>我们的锁现在还不能辨识是哪个线程抢到了自己，换句话说，一个线程可以释放已经被其他线程占用的锁——只要它不守规矩，不先lock()，直接unlock()，就可以了。</p>
+<p>我们需要做到： lock 只能被当前占用的线程释放。</p>
+<p>实现：</p>
+<ul>
+<li>给 MyLock 新增一个成员变量<code>owner</code>。</li>
+<li>当线程抢到锁时，把<code>owner</code>设置当前线程。</li>
+<li>当释放锁时，判断当前线程是否为<code>owner</code>，不是的话，就抛个异常出来。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">Thread</span> <span class="variable">owner</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">      owner = Thread.currentThread();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (owner != Thread.currentThread()) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  flag.compareAndSet(<span class="literal">true</span>, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3、现在有点像样了，但是还不行。目前，所有线程在没拿到锁后，都会不断循环尝试获取锁，这是一种对CPU的不必要消耗。</strong></p>
+<p>我们可以设计：当线程没拿到锁时，进行阻塞：<code>LockSupport.park()</code>；直到被别人唤醒，才继续争抢锁。</p>
+<p>这个唤醒的工作自然是由释放锁的线程来完成了，但是这又紧接着许多问题：</p>
+<ul>
+<li>问题一：我们上哪去找正在等待的线程？</li>
+</ul>
+<ul>
+<li>问题二：如果有多个正在等待的线程，应该唤醒哪一个呢？</li>
+</ul>
+<p>带着这两个问题，我们需要维护一个【等待链表】（为了方便查询，设计成双向），这个链表的节点结构是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>&#123;</span><br><span class="line">  Node prev;</span><br><span class="line">  Node next;</span><br><span class="line">  Thread current;</span><br><span class="line"></span><br><span class="line">  Node(Thread thread)&#123;</span><br><span class="line">    <span class="built_in">this</span>.current=thread;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 MyLock 中维护这个链表的【头结点】 <code>Node head</code> 以及【尾节点】<code>Node tail</code>。而唤醒线程的原则，我们就遵守【先进先出】。</p>
+<p>这样我们就可以回答上面的两个问题了：</p>
+<ul>
+<li>问题一解：用一个双向链表维护被阻塞的线程。</li>
+<li>问题二解：遵守【先进先出】原则。</li>
+</ul>
+<p><strong>这里还有一个重点</strong>：</p>
+<p><code>head</code>和<code>tail</code>是所有线程都能访问的，意味着也面临多线程操作，举个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">current.prev=tail;</span><br><span class="line">tail.next=current;</span><br><span class="line">tail=current;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码在多线程情况下是肯定会出问题的。</p>
+<p>所以当我们对<code>head</code>、<code>tail</code>进行各种引用操作时，也要保证原子性——用【原子引用】包装<code>head</code>、<code>tail</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> AtomicReference&lt;Node&gt; head=<span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Node</span>());</span><br><span class="line"><span class="keyword">private</span> AtomicReference&lt;Node&gt; tail=<span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(head.get());</span><br></pre></td></tr></table></figure>
+
+<p>OK，继续改造！</p>
+<p>每次阻塞一个线程时，我们设计以下思路：</p>
+<ol>
+<li>先创建一个节点<code>node</code>，插入到链表，并维护双向链表结构。</li>
+<li>让线程休眠：<code>LockSupport.park()</code></li>
+<li>当被唤醒时，要进行判断：是不是轮到自己了？以及是不是真能抢到锁？如果均为肯定，则加锁；如果不是，则继续休眠，等待被唤醒。</li>
+</ol>
+<p><strong>这里的第1点是有问题的</strong>：可能有多个线程并发的要插入到这个等待队列中，这也是我们使用原子引用封装<code>head</code>、<code>tail</code>的原因</p>
+<p>所以第1点应该改为：先创建一个节点<code>node</code>，循环的尝试插入到链表，直到成功，并维护双向链表结构。</p>
+<p><strong>4、OK，整理一下上述思路，我们就可以得到一个实现了 lock() 的 MyLock，让我们直接用代码概括吧。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyLock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicBoolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicBoolean</span>(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Thread</span> <span class="variable">owner</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Node&gt; head = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Node</span>());</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Node&gt; tail = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(head.get());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 拿到锁直接返回</span></span><br><span class="line">        <span class="keyword">if</span> (flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">            owner = Thread.currentThread();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 没拿到锁的话，则要安全的把自己放在链表上</span></span><br><span class="line">        <span class="type">Node</span> <span class="variable">current</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        current.thread = Thread.currentThread();</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="type">Node</span> <span class="variable">currentTail</span> <span class="operator">=</span> tail.get();</span><br><span class="line">            <span class="keyword">if</span> (tail.compareAndSet(currentTail, current)) &#123;</span><br><span class="line">                current.prev = currentTail;</span><br><span class="line">                currentTail.next = current;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 拿到锁的话，要安全的把自己从链表中删除</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="comment">// 休眠</span></span><br><span class="line">            LockSupport.park();</span><br><span class="line">            <span class="keyword">if</span> (head.get().next == current &amp;&amp; flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">                owner = Thread.currentThread();</span><br><span class="line">                head.set(current);</span><br><span class="line">                current.prev.next = <span class="literal">null</span>;</span><br><span class="line">                current.prev = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (owner != Thread.currentThread()) &#123;</span><br><span class="line">          	<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        flag.compareAndSet(<span class="literal">true</span>, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        Node prev;</span><br><span class="line">        Node next;</span><br><span class="line">        Thread thread;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>5、我们现在开始补充释放锁 unlock() 的逻辑</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">  	<span class="keyword">if</span> (owner == Thread.currentThread()) &#123;</span><br><span class="line">    	flag.compareAndSet(<span class="literal">true</span>, <span class="literal">false</span>);</span><br><span class="line">  	&#125;</span><br><span class="line">  	<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们在<code>lock()</code>中已经实现了：</p>
+<ul>
+<li>线程如果拿到锁，则直接返回</li>
+<li>如果没拿到锁的话，则要安全的把自己放在链表上，然后休眠。</li>
+<li>被唤醒后，如果能拿到锁的话，要安全的把自己从链表中删除。</li>
+</ul>
+<p>而在<code>unlock()</code>中，我们其实就只要实现【当一个线程释放锁时，唤醒等待队列中的第一个线程】。</p>
+<p>直接上代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">  	<span class="keyword">if</span> (owner != Thread.currentThread()) &#123;</span><br><span class="line">    		<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">  	&#125;</span><br><span class="line">  	<span class="type">Node</span> <span class="variable">headNode</span> <span class="operator">=</span> head.get();</span><br><span class="line">  	flag.set(<span class="literal">false</span>);</span><br><span class="line">  	<span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;</span><br><span class="line">    		LockSupport.unpark(headNode.next.thread);</span><br><span class="line">  	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>flag.set(flag)</code>不需要使用CAS操作，因为我们分析可知，此处是不可能有竞争的。</p>
+<p><strong>这里有两点非常重要</strong>：</p>
+<ul>
+<li><p><code>flag.set(false)</code>一定要在<code> LockSupport.unpark(headNode.next.thread);</code>之前，因为你要唤醒别的线程去抢锁，你肯定得先把锁释放了。</p>
+</li>
+<li><p><code>flag.set(false)</code>一定要在<code>Node headNode = head.get();</code>之后，因为一旦<code>flag.set(false)</code>，那就意味着所有的线程都可以并发，执行下面的代码；</p>
+<p>如果代码写成这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">flag.set(<span class="literal">false</span>);</span><br><span class="line">Node headNode=head.get();  <span class="comment">//(1)</span></span><br><span class="line"><span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;</span><br><span class="line">    LockSupport.unpark(headNode.next.thread);   <span class="comment">//(2)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里（2）处的<code>headNode</code>与（1）处的<code>headNode</code>就可能指向的不是同一个对象了。</p>
+</li>
+</ul>
+<p><strong>6、OK，整理一下我们当前的版本</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyLock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicBoolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicBoolean</span>(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Thread</span> <span class="variable">owner</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Node&gt; head = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Node</span>());</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Node&gt; tail = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(head.get());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 拿到锁直接返回</span></span><br><span class="line">        <span class="keyword">if</span> (flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">            owner = Thread.currentThread();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 没拿到锁的话，则要安全的把自己放在链表上</span></span><br><span class="line">        <span class="type">Node</span> <span class="variable">current</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        current.thread = Thread.currentThread();</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="type">Node</span> <span class="variable">currentTail</span> <span class="operator">=</span> tail.get();</span><br><span class="line">            <span class="keyword">if</span> (tail.compareAndSet(currentTail, current)) &#123;</span><br><span class="line">                current.prev = currentTail;</span><br><span class="line">                currentTail.next = current;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 拿到锁的话，要安全的把自己从链表中删除</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="comment">// 休眠</span></span><br><span class="line">            LockSupport.park();</span><br><span class="line">            <span class="keyword">if</span> (head.get().next == current &amp;&amp; flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">                owner = Thread.currentThread();</span><br><span class="line">                head.set(current);</span><br><span class="line">                current.prev.next = <span class="literal">null</span>;</span><br><span class="line">                current.prev = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (owner != Thread.currentThread()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">headNode</span> <span class="operator">=</span> head.get();</span><br><span class="line">        flag.set(<span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;</span><br><span class="line">            LockSupport.unpark(headNode.next.thread);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        Node prev;</span><br><span class="line">        Node next;</span><br><span class="line">        Thread thread;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>我在这里还应该提醒一点</strong>：</p>
+<p>我们这里实现的并不是一个严格保证【先到先得】机制的锁。我们能保证的是：如果一个进程进入阻塞队列了，那么在这个阻塞队列的范围内，我们保证【先到先得】。</p>
+<p>如何理解？假设这样一个场景：</p>
+<blockquote>
+<p>当线程A执行完<code>unlock()</code>中的<code> LockSupport.unpark(headNode.next.thread);</code>这一条语句，此时锁被释放，等待队列中的线程B被唤醒；</p>
+<p>同时新来了一个线程C，因为锁被释放了，所以它直接快B一步，抢到了锁；</p>
+<p>线程B发现还是抢不到锁，所以再次休眠，等待线程C的唤醒；</p>
+<p>也许被线程C唤醒时，又会跑来一个线程D，重复发生上述故事………</p>
+</blockquote>
+<p>这在我们的代码中是完全可能发生的。事实上，这就是所谓的【非公平锁】。</p>
+<p><strong>7、如何实现一个公平锁呢？</strong></p>
+<p>其实很简单，引起不公平的原因其实就是这一段代码，我们把它注释掉，就成为【公平锁】了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 拿到锁直接返回</span></span><br><span class="line"><span class="comment">//        if (flag.compareAndSet(false, true)) &#123;</span></span><br><span class="line"><span class="comment">//            owner = Thread.currentThread();</span></span><br><span class="line"><span class="comment">//            return;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>8、目前这个版本是存在死锁可能性的</strong>。</p>
+<p>我们用注释标注几行代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyLock</span> &#123;</span><br><span class="line">    /...../</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        /...../</span><br><span class="line">        <span class="comment">// 没拿到锁的话，则要安全的把自己放在链表上</span></span><br><span class="line">        <span class="type">Node</span> <span class="variable">current</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        current.thread = Thread.currentThread();</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="type">Node</span> <span class="variable">currentTail</span> <span class="operator">=</span> tail.get();</span><br><span class="line">            <span class="keyword">if</span> (tail.compareAndSet(currentTail, current)) &#123;</span><br><span class="line">                current.prev = currentTail;            <span class="comment">//(1)</span></span><br><span class="line">                currentTail.next = current;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        /...../</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (owner != Thread.currentThread()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">headNode</span> <span class="operator">=</span> head.get();           <span class="comment">//(2)</span></span><br><span class="line">        flag.set(<span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;              <span class="comment">//(3)</span></span><br><span class="line">            LockSupport.unpark(headNode.next.thread);    </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /......./</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>假设这样的场景：</p>
+<blockquote>
+<p>有线程A和线程B并发，线程A先抢到了锁，执行完了自己的任务，准备释放锁，此时它在（2）处，还没有执行；</p>
+<p>线程B没有抢到锁，所以准备把自己放到等待队列中，此时它在（1）处，没有执行；</p>
+<p>此时线程A执行（2）（3）处代码，问题发生了——线程B执行了<code>tail.compareAndSet(currentTail, current)</code>，所以（2）（3）处<code>headNode</code>是存在的；但是线程B没有执行（1）处，所以<code>headNode.next</code>是空，所以线程A不会去唤醒线程B。</p>
+<p>线程A完成了<code>lock</code>与<code>unlock</code>，拍拍屁股走了，但是线程B却一直在休眠。</p>
+<p>除非有新的线程进来，否则线程B将一直休眠，死锁产生。</p>
+</blockquote>
+<p><strong>怎么解决呢？其实也很简单</strong>。</p>
+<p>把这段代码改成这样即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 拿到锁的话，要安全的把自己从链表中删除</span></span><br><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">  	<span class="keyword">if</span> (head.get().next == current &amp;&amp; flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">    		owner = Thread.currentThread();</span><br><span class="line">    		head.set(current);</span><br><span class="line">    		current.prev.next = <span class="literal">null</span>;</span><br><span class="line">    		current.prev = <span class="literal">null</span>;</span><br><span class="line">    		<span class="keyword">return</span>;</span><br><span class="line">  	&#125;</span><br><span class="line">  	<span class="comment">// 休眠</span></span><br><span class="line">  	LockSupport.park();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>细品即可。</p>
+<p><strong>9、最终版本</strong></p>
+<p>总结Lock的本质：状态变量 + 双向链表 + CAS + 自选</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> safeList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicBoolean;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicReference;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.LockSupport;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Michael</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyLock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicBoolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicBoolean</span>(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Thread</span> <span class="variable">owner</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Node&gt; head = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Node</span>());</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Node&gt; tail = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(head.get());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 拿到锁直接返回（注掉这一段，就变成【公平锁】）</span></span><br><span class="line">        <span class="keyword">if</span> (flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">            owner = Thread.currentThread();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 没拿到锁的话，则要安全的把自己放在链表上</span></span><br><span class="line">        <span class="type">Node</span> <span class="variable">current</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        current.thread = Thread.currentThread();</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="type">Node</span> <span class="variable">currentTail</span> <span class="operator">=</span> tail.get();</span><br><span class="line">            <span class="keyword">if</span> (tail.compareAndSet(currentTail, current)) &#123;</span><br><span class="line">                current.prev = currentTail;</span><br><span class="line">                currentTail.next = current;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 拿到锁的话，要安全的把自己从链表中删除</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (head.get().next == current &amp;&amp; flag.compareAndSet(<span class="literal">false</span>, <span class="literal">true</span>)) &#123;</span><br><span class="line">                owner = Thread.currentThread();</span><br><span class="line">                head.set(current);</span><br><span class="line">                current.prev.next = <span class="literal">null</span>;</span><br><span class="line">                current.prev = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 休眠</span></span><br><span class="line">            LockSupport.park();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (owner != Thread.currentThread()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">headNode</span> <span class="operator">=</span> head.get();</span><br><span class="line">        flag.set(<span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;</span><br><span class="line">            LockSupport.unpark(headNode.next.thread);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        Node prev;</span><br><span class="line">        Node next;</span><br><span class="line">        Thread thread;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四、可重入锁"><a href="#四、可重入锁" class="headerlink" title="四、可重入锁"></a>四、可重入锁</h2><h3 id="1、可重入锁概念"><a href="#1、可重入锁概念" class="headerlink" title="1、可重入锁概念"></a>1、可重入锁概念</h3><p>【可重入锁】指的是：当一个线程获得一把锁时，可再次获得这把锁，而不会发生死锁。</p>
+<p>在 Java 中，<code>synchronized</code> <strong>是可重入锁</strong>，支持<strong>同一个线程多次进入同步代码块</strong>。</p>
+<p>举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ReentrantExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">methodA</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;methodA()&quot;</span>);</span><br><span class="line">        methodB();  <span class="comment">// 线程已经获取了锁，可以再次进入 methodB()</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">methodB</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;methodB()&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ReentrantExample</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantExample</span>();</span><br><span class="line">        obj.methodA();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">methodA()</span><br><span class="line">methodB()</span><br></pre></td></tr></table></figure>
+
+<p>Java 提供的 <strong><code>ReentrantLock</code></strong> 也是<strong>可重入锁</strong>，允许同一个线程<strong>多次获取同一把锁</strong>。</p>
+<p>其实<code>reentrantLock</code>就翻译为【可重入锁】。</p>
+<h3 id="2、什么时候会有一个线程重复获得锁？"><a href="#2、什么时候会有一个线程重复获得锁？" class="headerlink" title="2、什么时候会有一个线程重复获得锁？"></a>2、什么时候会有一个线程重复获得锁？</h3><ul>
+<li>方法递归调用</li>
+<li>同一个锁保护的多个方法之间的调用（如上）</li>
+<li>在一个线程中循环获得锁</li>
+</ul>
+<h3 id="3、手写可重入锁MyReentrantLock"><a href="#3、手写可重入锁MyReentrantLock" class="headerlink" title="3、手写可重入锁MyReentrantLock"></a>3、手写可重入锁MyReentrantLock</h3><p><strong>核心思路</strong>：</p>
+<p>1）将<code> AtomicBoolean flag = new AtomicBoolean(false)</code>改为<code>AtomicInteger state = new AtomicInteger(0)</code></p>
+<p><code>state</code>描述的是当前【锁被同一个线程获取的次数】。</p>
+<p>线程能直接获取锁的条件也就变成了：【锁当前是自由的】或者【锁已经被当前线程获取】</p>
+<p>2）在<code>lock()</code>的入口处，修改【线程直接获取锁】的逻辑，支持通过【锁已经被当前线程获取】获取到锁。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 拿到锁直接返回（注掉这一段，就变成【公平锁】）</span></span><br><span class="line">        <span class="keyword">if</span>(state.get()==<span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (state.compareAndSet(<span class="number">0</span>, <span class="number">1</span>)) &#123;</span><br><span class="line">                owner = Thread.currentThread();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(owner==Thread.currentThread())&#123;</span><br><span class="line">            state.incrementAndGet();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>3）修改锁的释放逻辑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (owner != Thread.currentThread()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> i=state.get();</span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            state.set(i-<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(i&lt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;重入锁 unlock 次数大于 lock 次数！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">headNode</span> <span class="operator">=</span> head.get();</span><br><span class="line">        owner=<span class="literal">null</span>;                     <span class="comment">//(1)</span></span><br><span class="line">        state.set(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;</span><br><span class="line">            LockSupport.unpark(headNode.next.thread);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意（1）处：</p>
+<ul>
+<li><p>在不可重入锁版本中，<code>owner=null</code>没有存在的必要，不过就算加上也不会有错。</p>
+</li>
+<li><p>在当前可重入锁版本中，<code>owner=null</code>是必须的，否则会有两个线程获取到锁的可能。</p>
+<p>假设可重入场景下，不写<code>owner=null</code>：</p>
+<blockquote>
+<p>线程A获取到锁，执行完任务后，释放掉锁，但此时 owner 仍指向线程A；</p>
+<p>线程B通过<code>if(state.get()==0)</code>获取到锁，但还没来得及将 owner 指向自己；</p>
+<p>线程A又尝试争抢锁，由于<code>else if(owner==Thread.currentThread())</code>是成立的，所以线程A也获得锁；</p>
+<p>A、B同时获得锁，锁失效。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>MyReentrantLock最终版本</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> safeList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicBoolean;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicReference;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.LockSupport;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Michael</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyReentrantLock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicInteger</span> <span class="variable">state</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Thread</span> <span class="variable">owner</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Node&gt; head = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Node</span>());</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Node&gt; tail = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;(head.get());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 拿到锁直接返回（注掉这一段，就变成【公平锁】）</span></span><br><span class="line">        <span class="keyword">if</span>(state.get()==<span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (state.compareAndSet(<span class="number">0</span>, <span class="number">1</span>)) &#123;</span><br><span class="line">                owner = Thread.currentThread();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(owner==Thread.currentThread())&#123;</span><br><span class="line">            state.incrementAndGet();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 没拿到锁的话，则要安全的把自己放在链表上</span></span><br><span class="line">        <span class="type">Node</span> <span class="variable">current</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>();</span><br><span class="line">        current.thread = Thread.currentThread();</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="type">Node</span> <span class="variable">currentTail</span> <span class="operator">=</span> tail.get();</span><br><span class="line">            <span class="keyword">if</span> (tail.compareAndSet(currentTail, current)) &#123;</span><br><span class="line">                current.prev = currentTail;</span><br><span class="line">                currentTail.next = current;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 拿到锁的话，要安全的把自己从链表中删除</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (head.get().next == current &amp;&amp; state.compareAndSet(<span class="number">0</span>, <span class="number">1</span>)) &#123;</span><br><span class="line">                owner = Thread.currentThread();</span><br><span class="line">                head.set(current);</span><br><span class="line">                current.prev.next = <span class="literal">null</span>;</span><br><span class="line">                current.prev = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 休眠</span></span><br><span class="line">            LockSupport.park();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (owner != Thread.currentThread()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;当前线程并不占用锁，不允许释放锁&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> i=state.get();</span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            state.set(i-<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(i&lt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;重入锁 unlock 次数大于 lock 次数！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Node</span> <span class="variable">headNode</span> <span class="operator">=</span> head.get();</span><br><span class="line">        owner=<span class="literal">null</span>;</span><br><span class="line">        state.set(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;</span><br><span class="line">            LockSupport.unpark(headNode.next.thread);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">        Node prev;</span><br><span class="line">        Node next;</span><br><span class="line">        Thread thread;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>测试<code>main</code>函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> safeList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LockExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">int</span>[] count = &#123;<span class="number">100</span>&#125;;</span><br><span class="line">        MyReentrantLock myLock=<span class="keyword">new</span> <span class="title class_">MyReentrantLock</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> <span class="type">int</span> NUM=<span class="number">30</span>;</span><br><span class="line">        Thread[] threads=<span class="keyword">new</span> <span class="title class_">Thread</span>[NUM];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; NUM; i++) &#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;NUM;i++)&#123;</span><br><span class="line">                        myLock.lock();</span><br><span class="line">                        count[<span class="number">0</span>]--;</span><br><span class="line">                        myLock.unlock();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            threads[i]=thread;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; NUM; i++) &#123;</span><br><span class="line">            threads[i].start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; NUM; i++) &#123;</span><br><span class="line">            threads[i].join();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(count[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="五、无法理解的BUG"><a href="#五、无法理解的BUG" class="headerlink" title="五、无法理解的BUG"></a>五、无法理解的BUG</h2><p>在用上面的测试函数对<code>MyReentrantLock</code>进行测试时，我遇到了这样的情况：</p>
+<p><img src="D:\Typora\笔记\笔记\图片\202503140039790.png" alt="image-20250314000108725"></p>
+<p>它居然显示这里会有空指针异常，我无法理解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;</span><br><span class="line">  	LockSupport.unpark(headNode.next.thread);  <span class="comment">// 此处 headNode.next</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更离谱的是，前期试出过几次后，我在程序里循环执行10000次这个测试，但都没有复现！</p>
+<p>更离谱的是，当我放弃循环，而是大概手点了50次之后，它又出现了……….</p>
+<p>我发誓我没有修改任何一行代码！我发誓上面这张图也不是P图！</p>
+<p>但是我隐约觉得这应该不是代码逻辑的问题。。。。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2025" class="archive-year">2025</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/">博客搭建记录</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">博客建设</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E5%A5%A5%E6%89%98%C2%B7%E9%98%BF%E6%B3%A2%E5%8D%A1%E5%88%A9%E6%96%AF/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E5%A5%A5%E6%89%98%C2%B7%E9%98%BF%E6%B3%A2%E5%8D%A1%E5%88%A9%E6%96%AF/">奥托·阿波卡利斯</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E8%8A%BD%E8%A1%A3%E4%B8%8E%E7%88%B1%E8%8E%89%E5%B8%8C%E9%9B%85/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E8%8A%BD%E8%A1%A3%E4%B8%8E%E7%88%B1%E8%8E%89%E5%B8%8C%E9%9B%85/">芽衣与爱莉希雅</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/LeetCode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/LeetCode%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/">LeetCode刷题笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/Java%E5%9F%BA%E7%A1%80/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -337,64 +463,130 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
         		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2025/02/28/%E8%A5%BF%E6%96%B9%E5%93%B2%E5%AD%A6%E5%8F%B2/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2025/02/28/%E8%A5%BF%E6%96%B9%E5%93%B2%E5%AD%A6%E5%8F%B2/">西方哲学史</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
+      		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">锁</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">并发</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2025/03/14/Java-%E5%B9%B6%E5%8F%91%E4%B8%8E%E9%94%81/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2025/03/08/%E5%A4%A9%E6%B0%94%E6%9F%A5%E8%AF%A2agent/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">coze+laf 天气查询agent-开发文档</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-%E9%94%81%E4%B8%8E%E5%B9%B6%E5%8F%91"><span class="toc-number">1.</span> <span class="toc-text">Java-锁与并发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%BC%80%E5%A7%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81MyReadWriteLock"><span class="toc-number">1.2.</span> <span class="toc-text">二、MyReadWriteLock</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%81%94%E6%83%B3%E5%88%B0%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、联想到信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Lock%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">三、Lock的底层实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81CAS%EF%BC%88Compare-And-Swap%EF%BC%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">1、CAS（Compare And Swap）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%87%AA%E6%97%8B%E9%94%81%EF%BC%88Spin-Lock%EF%BC%89"><span class="toc-number">1.3.2.</span> <span class="toc-text">2、自旋锁（Spin Lock）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81Lock%E6%BA%AF%E6%BA%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">3、Lock溯源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%89%8B%E5%86%99MyLock"><span class="toc-number">1.3.4.</span> <span class="toc-text">4、手写MyLock</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81"><span class="toc-number">1.4.</span> <span class="toc-text">四、可重入锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E6%A6%82%E5%BF%B5"><span class="toc-number">1.4.1.</span> <span class="toc-text">1、可重入锁概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E6%9C%89%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%87%8D%E5%A4%8D%E8%8E%B7%E5%BE%97%E9%94%81%EF%BC%9F"><span class="toc-number">1.4.2.</span> <span class="toc-text">2、什么时候会有一个线程重复获得锁？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%89%8B%E5%86%99%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81MyReentrantLock"><span class="toc-number">1.4.3.</span> <span class="toc-text">3、手写可重入锁MyReentrantLock</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%97%A0%E6%B3%95%E7%90%86%E8%A7%A3%E7%9A%84BUG"><span class="toc-number">1.5.</span> <span class="toc-text">五、无法理解的BUG</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
-    </nav>
+  
+
+  
+
   
 
 
@@ -418,8 +610,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
