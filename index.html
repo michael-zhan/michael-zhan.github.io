@@ -434,7 +434,7 @@
 
 
 <h2 id="五、无法理解的BUG"><a href="#五、无法理解的BUG" class="headerlink" title="五、无法理解的BUG"></a>五、无法理解的BUG</h2><p>在用上面的测试函数对<code>MyReentrantLock</code>进行测试时，我遇到了这样的情况：</p>
-<p><img src="D:\Typora\笔记\笔记\图片\202503140039790.png" alt="image-20250314000108725"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/michael-zhan/Images/img/202503140039790.png" alt="202503140039790.png"></p>
 <p>它居然显示这里会有空指针异常，我无法理解：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(headNode.next!=<span class="literal">null</span>)&#123;</span><br><span class="line">  	LockSupport.unpark(headNode.next.thread);  <span class="comment">// 此处 headNode.next</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
