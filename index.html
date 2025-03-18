@@ -142,6 +142,170 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java-线程池" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/18/Java-%E7%BA%BF%E7%A8%8B%E6%B1%A0/">Java-线程池</a>
+    </h1>
+  
+
+        
+        <a href="/2025/03/18/Java-%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="archive-article-date">
+  	<time datetime="2025-03-18T15:57:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Java-线程池"><a href="#Java-线程池" class="headerlink" title="Java-线程池"></a>Java-线程池</h1><p>如果我们要实现一个线程池，那至少应该先明白线程池的意义是什么：</p>
+<blockquote>
+<p>线程池是一种线程管理机制，是为了复用已创建的线程，避免频繁的创建和销毁线程——这会消耗大量的CPU性能。</p>
+</blockquote>
+<p>OK，这是我们目前的线程池，它几乎什么都没有：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyThreadPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span>&#123;</span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>execute()</code>接收一个任务<code>Runnable command</code>，<code>command</code>应该得到一个线程来执行。</p>
+<p><strong>1、我们先创建一个线程来把task跑起来吧</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span>&#123;</span><br><span class="line">  	Thread thread=<span class="keyword">new</span> <span class="title class_">Thread</span>(command);</span><br><span class="line">  	thread.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这当然不符合线程池的意义——它每次对新加入的任务都是新创建了线程，任务完成后，线程就自动销毁，完全没有复用线程的过程。</p>
+<p><strong>2、如何让线程能够被复用呢</strong>？</p>
+<p>1）首先，我们得让线程成为线程池的一部分，也就是新创建一个成员变量<code>thread</code>。</p>
+<p>2）复用线程得让这个线程不会自动销毁，那我们就可以往这个线程里塞一个循环：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyThreadPool</span> &#123;</span><br><span class="line">  </span><br><span class="line">    Thread thread=<span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            /..../</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  	</span><br><span class="line">  	&#123;</span><br><span class="line">    	thread.start();</span><br><span class="line">  	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3）接下来就是把我们所有的任务放到这个线程中来执行了。</p>
+<p>我们的方案是，在线程池中维护一个<code>commandList</code>来保存所有等待执行的任务，然后在<code>thread</code>不断地循环读取<code>commandList</code>，每执行完一个<code>commamd</code>就删除掉。</p>
+<p>这样一来，所有新加入的任务，最终都会在<code>thread</code>中被执行。我们代码实现一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyThreadPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;Runnable&gt; commandList=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    Thread thread=<span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!commandList.isEmpty())&#123;</span><br><span class="line">                <span class="type">Runnable</span> <span class="variable">command</span> <span class="operator">=</span> commandList.remove(<span class="number">0</span>);</span><br><span class="line">                command.run();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  	</span><br><span class="line">  	&#123;</span><br><span class="line">    	thread.start();</span><br><span class="line">  	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span>&#123;</span><br><span class="line">        commandList.add(command);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3、OK，现在线程能够复用了，任务也能执行了，但是存在严重的性能浪费</strong>。</p>
+<p>在上面的代码中，即使当前<code>commandList</code>为空，while 循环也依然不断地进行，严重浪费CPU性能，与线程池的意义相悖。</p>
+<p>有没有一种代替<code>commandList</code>的数据结构，使得【当任务列表为空的时候，线程就会在这里阻塞，从而解放CPU；当任务列表不为空，又能停止阻塞呢，继续执行任务呢？】</p>
+<p>有的xd，有的。我们先看是怎么做的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyThreadPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    BlockingQueue&lt;Runnable&gt; commandList=<span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">1024</span>);</span><br><span class="line">    Thread thread=<span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Runnable</span> <span class="variable">task</span> <span class="operator">=</span> commandList.take();</span><br><span class="line">                task.run();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span>&#123;</span><br><span class="line">        commandList.offer(command);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>BlockingQueue</code>即阻塞队列，<code>take()</code>会在队列中没有元素时自动阻塞，当加入元素后解除阻塞，执行任务。注意在创建<code>BlockingQueue</code>要指定最大容量，防止无限制的添加任务。</p>
+<p><strong>4、OK，现在线程能够实现复用。但是我们目前只有一个线程，自然是不够用的</strong>。</p>
+<p>创建<code>ThreadList</code>来维护所有已存在的线程，并且设置一个<code>threadSize</code>来规定线程池的大小，具体的逻辑是：</p>
+<ol>
+<li><p>如果当前线程池的线程数量小于<code>threadSize</code>，那么就新建线程。</p>
+</li>
+<li><p>把任务加入阻塞队列。</p>
+</li>
+<li><p>每个线程都应该执行这段代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">Runnable</span> <span class="variable">command</span> <span class="operator">=</span> commandList.take();</span><br><span class="line">    command.run();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>完整实现一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyThreadPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    BlockingQueue&lt;Runnable&gt; commandList=<span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">1024</span>);</span><br><span class="line"></span><br><span class="line">    Runnable task=()-&gt;&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Runnable</span> <span class="variable">command</span> <span class="operator">=</span> commandList.take();</span><br><span class="line">                command.run();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> threadListSize=<span class="number">10</span>;</span><br><span class="line">    List&lt;Thread&gt; threadList=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(threadList.size()&lt;threadListSize)&#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(task);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">      	commandList.offer(command);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>5、如果threadSize规定的线程数量不够用了，那该怎么办？</strong></p>
+<p>核心线程忙不过来，导致任务堆积在阻塞队列中，直到阻塞队列被塞满，此时<code>commandList.offer(command)</code>就会执行失败，任务不会被执行。</p>
+<p><strong>此时我们应该允许再额外创建线程，来分摊核心线程的压力</strong>。</p>
+<p>我们把原先创建的<code>threadList</code>改名为<code>coreList</code>，表示这是【核心线程】，最大数量为<code>coreThreadSize</code>；而再额外创建的线程，专门用一个<code>supportList</code>来维护，表示这是【辅助线程】。【核心线程】数量 + 【辅助线程】数量不应该超过<code>maxSize</code>。</p>
+<p>OK，我们重新梳理一下<code>execute(Runnable command)</code>流程：</p>
+<ol>
+<li>如果当前核心线程数量未满，则创建线程，把任务加入阻塞队列后即可返回。</li>
+<li>如果核心线程数量已满，但是<code>commandList.offer(command)</code>返回 true ，表示核心线程还可以忙的过来，那也可以直接返回。</li>
+<li>如果<code>commandList.offer(command)</code>返回 false，表示阻塞队列已经被塞满了，那此时就应该创建辅助线程（需满足总线程数不超过<code>maxSize</code>），来帮忙清理阻塞队列。</li>
+<li>创建完辅助线程并<code>start()</code>后，再尝试<code>commandList.offer(command)</code>，如果还失败，那说明任务实在是太多了，确实不能再添加任务了，此时应该抛一个异常，表示【并发任务数量已达上限】。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyThreadPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    BlockingQueue&lt;Runnable&gt; commandList=<span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">1024</span>);</span><br><span class="line">    <span class="type">int</span> <span class="variable">coreThreadSize</span> <span class="operator">=</span><span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> maxSize=<span class="number">20</span>;</span><br><span class="line">    List&lt;Thread&gt; coreList =<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    List&lt;Thread&gt; supportList=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    Runnable task=()-&gt;&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Runnable</span> <span class="variable">command</span> <span class="operator">=</span> commandList.take();</span><br><span class="line">                command.run();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(coreList.size()&lt; coreThreadSize)&#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(task);</span><br><span class="line">            coreList.add(thread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(commandList.offer(command))&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(coreList.size()+supportList.size()&lt;maxSize)&#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(task);</span><br><span class="line">            supportList.add(thread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!commandList.offer(command))&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;阻塞队列已满&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>6、现在的版本，线程一旦被创建，就会一直存在，即使阻塞队列中已经长时间没有新任务</strong>。</p>
+<p>这对资源管理是不利的。</p>
+<ul>
+<li><p>对于核心线程，我们可以接受他们一直在工作；</p>
+</li>
+<li><p>对于辅助线程，如果长时间不被使用的情况下，应该自动结束辅助线程的生命周期。</p>
+</li>
+</ul>
+<p>重点在 take() 这个函数，因为他会一直阻塞在这里。如果<code>take()</code>能接收一个超时时间，问题就好解决了。</p>
+<p><strong>BlockingQueue 中还有一个 API 满足这个要求：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E <span class="title function_">poll</span><span class="params">(<span class="type">long</span> timeout, TimeUnit unit)</span></span><br></pre></td></tr></table></figure>
+
+<p>他的功能与<code>take()</code>一致，但是能接收<code>timeout</code>参数，如果规定时间内没有拿到元素，则直接返回<code>null</code>。</p>
+<p>这就很简单了，直接改代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyThreadPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    /.../</span><br><span class="line">    <span class="type">int</span> timeout=<span class="number">1</span>;</span><br><span class="line">  	TimeUnit timeUnit=TimeUnit.MINUTES;</span><br><span class="line"></span><br><span class="line">    <span class="type">Runnable</span> <span class="variable">coreTask</span> <span class="operator">=</span>()-&gt;&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Runnable</span> <span class="variable">command</span> <span class="operator">=</span> commandList.take();</span><br><span class="line">                command.run();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="type">Runnable</span> <span class="variable">supportTask</span> <span class="operator">=</span>()-&gt;&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Runnable</span> <span class="variable">command</span> <span class="operator">=</span> commandList.poll(timeout, timeUnit);</span><br><span class="line">                <span class="keyword">if</span>(command==<span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                command.run();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(coreList.size()&lt; coreThreadSize)&#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(coreTask);</span><br><span class="line">            coreList.add(thread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(commandList.offer(command))&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(coreList.size()+supportList.size()&lt;maxSize)&#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(supportTask);</span><br><span class="line">            supportList.add(thread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!commandList.offer(command))&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;阻塞队列已满&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>7、现在我们的线程池的功能已经基本完善——唯一缺乏的在于，我们对于阻塞队列爆满的情况，还没有做出一个合适的处理，只是抛出了一个异常</strong>。</p>
+<p>我们可以处理的方式可以有很多种：记录日志、保存在数据库中、或者发送一个消息等等。</p>
+<p>我们把这种处理方式抽象出来，称为【拒绝策略】。可以传入被拒绝执行的任务<code>command</code>以及线程池实例，方便支持更多的拒绝策略。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 拒绝策略</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Michael</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RejectHandle</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">reject</span><span class="params">(Runnable command,MyThreadPool myThreadPool)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义成接口，开发者就可以实现这个接口，自定义异常处理策略。</p>
+<p><strong>8、OK，最后，优化一下我们的代码：</strong></p>
+<p>1）提供一个构造函数，构造参数包括：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">coreThreadSize</span> <span class="operator">=</span><span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> maxSize=<span class="number">20</span>;</span><br><span class="line"><span class="type">int</span> timeout=<span class="number">1</span>;</span><br><span class="line">TimeUnit timeUnit=TimeUnit.MINUTES;</span><br><span class="line">BlockingQueue&lt;Runnable&gt; commandList=<span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">1024</span>);</span><br><span class="line">RejectHandle rejectHandle;</span><br></pre></td></tr></table></figure>
+
+<p>2）创建<code>CoreThread</code>和<code>SupportThread</code>，继承<code>Thread</code>，实现<code>run()</code>方法，将<code>coreTask</code>和<code>supportTask</code>都放到各自的<code>run()</code>方法中去。</p>
+<p><strong>9、最终版本</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> myThreadPool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Michael</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyThreadPool</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">coreThreadSize</span> <span class="operator">=</span><span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> maxSize=<span class="number">20</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> timeout=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> TimeUnit timeUnit=TimeUnit.MINUTES;</span><br><span class="line">    <span class="keyword">private</span> BlockingQueue&lt;Runnable&gt; commandList=<span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">1024</span>);</span><br><span class="line">    <span class="keyword">private</span> RejectHandle rejectHandle;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Thread&gt; coreList =<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> List&lt;Thread&gt; supportList=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyThreadPool</span><span class="params">(<span class="type">int</span> coreThreadSize, <span class="type">int</span> maxSize, <span class="type">int</span> timeout, TimeUnit timeUnit, BlockingQueue&lt;Runnable&gt; commandList, RejectHandle rejectHandle)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.coreThreadSize = coreThreadSize;</span><br><span class="line">        <span class="built_in">this</span>.maxSize = maxSize;</span><br><span class="line">        <span class="built_in">this</span>.timeout = timeout;</span><br><span class="line">        <span class="built_in">this</span>.timeUnit = timeUnit;</span><br><span class="line">        <span class="built_in">this</span>.commandList = commandList;</span><br><span class="line">        <span class="built_in">this</span>.rejectHandle = rejectHandle;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(coreList.size()&lt; coreThreadSize)&#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CoreThread</span>();</span><br><span class="line">            coreList.add(thread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(commandList.offer(command))&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(coreList.size()+supportList.size()&lt;maxSize)&#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SupportThread</span>();</span><br><span class="line">            supportList.add(thread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!commandList.offer(command))&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;阻塞队列已满&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">CoreThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="type">Runnable</span> <span class="variable">command</span> <span class="operator">=</span> commandList.take();</span><br><span class="line">                    command.run();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">SupportThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="type">Runnable</span> <span class="variable">command</span> <span class="operator">=</span> commandList.poll(timeout, timeUnit);</span><br><span class="line">                    <span class="keyword">if</span>(command==<span class="literal">null</span>)&#123;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    command.run();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 拒绝策略</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Michael</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RejectHandle</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">reject</span><span class="params">(Runnable command,MyThreadPool myThreadPool)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>特别提醒，这只是一个demo，真正的线程池操作是要保证线程安全，显然在本文中并没有实现这一点；在源码中，是使用了ReentrantLock来进行并发控制</strong>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">线程池</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2025/03/18/Java-%E7%BA%BF%E7%A8%8B%E6%B1%A0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Java-手写HashMap" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -3836,154 +4000,6 @@
 
 
   
-    <article id="post-凯文·卡斯兰娜" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/">凯文·卡斯兰娜</a>
-    </h1>
-  
-
-        
-        <a href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/" class="archive-article-date">
-  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="凯文·卡斯兰娜"><a href="#凯文·卡斯兰娜" class="headerlink" title="凯文·卡斯兰娜"></a>凯文·卡斯兰娜</h2><ul>
-<li>西西弗斯、普罗米修斯、伊卡洛斯</li>
-<li>文本内容几乎全部来自B站up主<a target="_blank" rel="noopener" href="https://space.bilibili.com/123895">文七传个火</a>的视频，本人只是出于兴趣而进行的“扒谱式”的码字。</li>
-</ul>
-<hr>
-<ol>
-<li><p>西西弗斯：徒劳、荒谬</p>
-<blockquote>
-<p>凯文：这个世界早已无法拯救，但我们还是必须成为英雄</p>
-</blockquote>
-<p>西西弗斯面对的是这样一种酷刑：热爱生命与自然，因此反抗了神的约定，于是神惩罚西西弗斯把一块巨石推上山顶，但石头总会因自身重力而滚落下来。这是一种的最可怕的惩罚，用尽全部心力却一无所成。</p>
-<blockquote>
-<p>加缪：登上顶峰的过程足以丰富心灵，西西弗斯应该是幸福的</p>
-</blockquote>
-<p>为什么？西西弗斯神话基于一种结果的无意义，这与加缪的”荒谬“高度相关”。荒谬基于比较,加缪的荒谬注重于两个词：生命、意义。对加缪影响颇深的帕斯卡是这样说的：</p>
-<blockquote>
-<p>帕斯卡：我看到整个宇宙的可怖的空间包围了我，我发现自己被附着在那个广漠无垠的领域的一角，而我又不知道，我何以被安置在这一点而不是另一点，也不知道为何使我得以生存的这一点时间，要把我固定在这一点上，而不是先我而往的全部永恒，与继我而来的全部永恒的另一点上，我看见的只是各个方面的无穷，他把我包围的像个原子。我所明了的一切，就是我很快就会死亡，然后我所最无知的，就是这种我所无法逃避的死亡本身。</p>
-</blockquote>
-<p>这和凯文有什么关系？凯文实际上是“不死的”，但其实凯文的不死与西西弗斯的永恒，就是这种永恒苦难的必要条件。</p>
-<ul>
-<li><p>生命和肉体的荒谬：</p>
-<blockquote>
-<p>总有那么一天，人发现或者说他已经三十岁了，他就这样确定了他的青春，但同时，她也确定了他对时间的位置。他承认自己处于一条曲线的某一点上，而这条曲线他已经表名是要跑完的，他自身归属于时间，从这种恐惧之中，他认出了自己最凶恶的敌人：明天。他希望着明天，但他本应该是拒绝的。肉体的这种的反抗，就是荒诞。</p>
-</blockquote>
-<p>人生而必死，但人们依旧会“反抗”。人就是这样。凯文的处境也是类似。</p>
-</li>
-<li><p>意义的荒谬：“觉察到世界的厚度”，“江畔何人初见月，江月何年初照人”.MEI；“不是我在仰望星空，而是星空在俯视我。”这是一种视角转换，这种“星空的俯视”依旧是人的自我近观，但是人们还是发现了“一个追求意义的人是如此的渺小”，而相比之下不止意义的巨大的宇宙是如此的庞大。认识到宇宙的无限，人的意义是显得如此渺小。MEI：“尽管如此，每个人还是在有意义的活着”。</p>
-<blockquote>
-<p>加缪：让我们为此最后努力并得出最后的一切结果吧。躯体、温情、创造。行为、人类最后的高贵</p>
-</blockquote>
-</li>
-</ul>
-<p>那么人们是要刻意去追寻“做不成”的事吗，人应该如何要找到自己要坚持的东西。<br>注重过程而非结果，这似乎是一种鸡汤。让我们用一种更为贴近生活的比喻：游戏。<br>游戏实际上是这样两种悖论：胜利的结局实则是失败以及失败的过程实则是胜利：</p>
-<ul>
-<li>当我们最终取得游戏胜利的那一刻，其实标志着游戏的结束，这可以说是一种失败。许多游戏的目标其实并没有意义，球落入网中本身没有任意意义，甚至落入网中那一刻标志的即将到来的下坠。</li>
-</ul>
-</li>
-</ol>
-<pre><code>- 当一个人正视这种无意义的结局并仍然全身心投入时，其过程就构成了意义，甚至包括过程中的失败。
-</code></pre>
-<p>​<br>     当听到“游戏人生”时，我们应该心生敬畏，因为这是一种对结果无意义的一种漠视和全身心投入其中的一种坦诚。游戏结束后无意义，并不影响丝毫那一瞬间的重要性。</p>
-<pre><code> &gt; 伊卡洛斯没有失败。他的坠落是飞行的结果，是另一种胜利的终点。
-&gt; 纵然这是一种格局极其狭隘的看法，是浪漫主义者的一厢情愿。
- &gt; 这或许是使世界运转的唯一规则。
-
- &gt; 这些一连串没有联系的行动，变成了他的命运，这命运便是由他创造的
-
- 只要是人总结出的东西；就一定带有自身的某种局限性，就一定有某种范围，只要超过这种范围，就没有意义。因此，许多的哲学家面对就是这样一种困境。但是，又因为“直面真理”一词听来是如此的具有魅力，以至于让无数思考者前赴后继而不论其意义如何。
-    
- &gt; 一个人性格就是他的命运
-
- 当我们这重音放在“他的”二字时（性格指什么暂不谈），我们就会意识到，性格塑造的命运，只属于他自己，而非操弄者所摆布的命运。命运因“他”而有意义。这就是整个前文明的精神。
-    
- &gt; 加缪的《局外人》：但是在一个突然被剥夺了幻觉和光明的宇宙中，人就感觉到自己是个局外人，这种放逐无可救药。因为人被剥夺了对故土的回忆和对乐土的希望。这种人和生活的分离，演员和布景的分离，正是这种荒诞感。
- 
- 凯文类似于这样一种局外人。这种局外是相对于上时代的，因为凯文最留恋的事物在上世代，并随上世代消失殆尽。不可否认凯文对现时代的在意很多来自与对MEI，爱莉和其他英杰的承诺。但是凯文却是以实际行动的真心来对待现世界的，无论是在乎现时代人们的理想、愿望，还是那句“最困难的，是放手不管”。
-</code></pre>
-<hr>
-<ol start="2">
-<li><p>普罗米修斯：希望的火种</p>
-<p>普罗米修斯被绑在悬崖之上被鹰鹫啄食内脏，但同时内脏又会不断的长出恢复，由此构成了一种了永恒的折磨。凯文也是如此。符华最终了解了凯文窃取终焉之力的真相：非律者的凯文本身并无法承受终焉之力的力量，因此这种力量无时无刻不在摧毁着凯文。但又因为融合战士的因子，凯文肉身被摧毁的同时不断再生。</p>
-</li>
-</ol>
-<pre><code>那么普罗米修斯窃取的火种又是什么呢？是火种计划，是圣痕计划。这就是凯文“窃取”的火种，将他们保存到了现时代，并仍然相信希望就在其中。这实际上给了西西弗斯无意义结局的一种审视态度：凯文把希望从前世代带到了现时代。而我们每个人，也应以人的历史的视角（而非宇宙）来看待我们每个人的结局，将希望作为我们的意义，将希望传递下去，从而投入我们的生命。这也是所谓“卡斯兰娜”精神的核心。凯文：最初的卡斯兰娜。
-</code></pre>
-<hr>
-<ol start="3">
-<li><p>伊卡洛斯：鸟为什么会飞</p>
-<p>“人类终将战胜崩坏”是凯文带给这个世界的意志，那么凯文又是怎么得出这个意志的呢。<br>鸟为什么会飞？因为他们不得不飞？不，是因为他们想要飞。鸟对天空的向往没有任何理由，或者说对飞翔的向往本身构成了理由，也构成了意义。此后所有的看似荒谬的行动，都是如此。</p>
-</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">哲学</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">崩三</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2025/02/28/%E5%87%AF%E6%96%87%C2%B7%E5%8D%A1%E6%96%AF%E5%85%B0%E5%A8%9C/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -4126,6 +4142,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">HashMap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">线程池</a>
               </li>
             
             <div class="clearfix"></div>
