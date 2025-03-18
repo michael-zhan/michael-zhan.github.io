@@ -142,6 +142,100 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-单测中使用Mockito屏蔽方法调用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/02/28/%E5%8D%95%E6%B5%8B%E4%B8%AD%E4%BD%BF%E7%94%A8Mockito%E5%B1%8F%E8%94%BD%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8/">单测中使用Mockito屏蔽方法调用</a>
+    </h1>
+  
+
+        
+        <a href="/2025/02/28/%E5%8D%95%E6%B5%8B%E4%B8%AD%E4%BD%BF%E7%94%A8Mockito%E5%B1%8F%E8%94%BD%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2025-02-28T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-02-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>单元测试的对象往往是类中某一个方法。基于单元测试规范，我们希望测试是独立的，即希望其他方法不会影响我们对这一个方法的测试。但如果在这个方法调用了其他方法，那么独立性就不可避免的受到影响。</p>
+<p>这时，我们可以使用<code>Mockito</code>来帮助我们。</p>
+<p>在使用Mockito进行单元测试时，如果你的方法调用了同一个类中的另一个方法，你可以使用Mockito.spy()方法来创建一个spy对象，它可以模拟真实对象的行为，并在需要时改变它们的行为。然后，你可以使用Mockito.doReturn()方法来指定被调用方法的返回值。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>下面是一个示例代码，其中假设你要测试的类是MyClass，其中有两个方法method1和method2，而method1调用了method2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">method1</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> method2();</span><br><span class="line">        <span class="comment">// some more code</span></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">method2</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">42</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，我们想要编写一个单元测试，仅测试method1()方法，但是我们需要确保在测试期间不调用method2()。</p>
+<p>在这种情况下，我们可以使用Spy对象和doReturn()方法来指定method2()方法的返回值。以下是示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.mockito.Mockito;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClassTest</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testMethod1</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">MyClass</span> <span class="variable">myClass</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyClass</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">MyClass</span> <span class="variable">spy</span> <span class="operator">=</span> Mockito.spy(myClass);</span><br><span class="line">        Mockito.doReturn(<span class="number">42</span>).when(spy).method2();</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> spy.method1();</span><br><span class="line"></span><br><span class="line">        assertEquals(<span class="number">42</span>, result);</span><br><span class="line">        verify(spy).method1();</span><br><span class="line">        verify(spy).method2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个测试中：</p>
+<ol>
+<li>我们首先创建了一个<code>MyClass</code>对象，并使用Spy()方法创建一个<code>spy</code>对象。</li>
+<li>然后，我们使用<code>doReturn()</code>方法指定了<code>method2()</code>方法的返回值为42。然后，我们调用<code>method1()</code>方法，并验证它的返回值是否等于42。</li>
+<li>最后，我们使用<code>verify()</code>方法来验证mock对象（spy对象）的方法被正确地调用。</li>
+</ol>
+<p><code>Mockito</code>提供的功能还有很多，比如：</p>
+<ul>
+<li>如果<code>method2()</code>是一个没有返回值的方法,则可以使用<code>doNothing</code>来代替<code>doReturn</code></li>
+<li>如果<code>method2()</code>需要参数，则可以使用<code>Mockito.any()</code>匹配任意类型的参数（不过我使用的时候，匹配int型的参数碰到些空指针问题，没有解决）</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2025/02/28/%E5%8D%95%E6%B5%8B%E4%B8%AD%E4%BD%BF%E7%94%A8Mockito%E5%B1%8F%E8%94%BD%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-博客搭建记录" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2695,6 +2789,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">HashMap</a>
               </li>
             
             <div class="clearfix"></div>
